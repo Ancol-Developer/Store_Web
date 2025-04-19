@@ -4,22 +4,22 @@ using ShoppingCart.Repository;
 
 namespace ShoppingCart.Controllers
 {
-    public class CategoryController : Controller
+    public class BrandsController : Controller
     {
         private readonly DataContext _db;
 
-        public CategoryController(DataContext db)
+        public BrandsController(DataContext db)
         {
             _db = db;
         }
+
         public async Task<IActionResult> Index(string? Slug = null)
         {
-            var category = _db.Categories.FirstOrDefault(c => c.Slug == Slug);
-
-            if (category is not null)
+            var brand = _db.Brands.FirstOrDefault(c => c.Slug == Slug);
+            if (brand is not null)
             {
-                var products = await _db.Products.Where(p => p.CategoryId == category.Id).ToListAsync();
-                return View(products.OrderByDescending(p => p.Id));
+                var producrts = await _db.Products.Where(p => p.BrandId == brand.Id).ToListAsync();
+                return View(producrts.OrderByDescending(p => p.Id));
             }
             return RedirectToAction("Index");
         }

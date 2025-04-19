@@ -13,19 +13,18 @@
 			{
 				<div class="col-sm-4">
 					<div class="product-image-wrapper">
-							<div class="single-products">
-								<a asp-controller="Product" asp-action="Details" asp-route-Id="@item.Id">
-									<div class="productinfo text-center">
-										<img src="~/images/@item.Image" alt="@item.Image" width="100%" />
-										<h2>$@item.Price</h2>
-										<p>@item.Name</p>
-										<p>Danh mục: @item.Category.Name</p>
-										<p>Thương hiệu: @item.Brand.Name</p>
-										<a class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-									</div>
-								</a>
-							</div>
-
+						<div class="single-products">
+							<a href="#">
+								<div class="productinfo text-center">
+									<img src="~/images/@item.Image" alt="@item.Image" width="100%" />
+									<h2>$@item.Price</h2>
+									<p>@item.Name</p>
+									<p>Danh mục: @item.Category.Name</p>
+									<p>Thương hiệu: @item.Brand.Name</p>
+									<a class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+								</div>
+							</a>
+						</div>
 						<div class="choose">
 							<ul class="nav nav-pills nav-justified">
 								<li><a href="#"><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
