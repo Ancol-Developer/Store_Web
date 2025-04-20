@@ -1,0 +1,15 @@
+﻿@model IEnumerable<BrandModel>
+
+@if (Model is not null && Model.Any())
+{
+	foreach (var item in Model)
+	{
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title">
+					<a asp-controller="Brands" asp-action="index" asp-route-Slug="@item.Slug">@item.Name</a>
+				</h4>
+			</div>
+		</div>
+	}
+}
