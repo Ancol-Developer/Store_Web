@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ShoppingCart.Models;
 using ShoppingCart.Models.ViewModel;
 using ShoppingCart.Repository;
@@ -22,6 +23,114 @@ namespace ShoppingCart.Controllers
                 GrandTotal = cartItems.Sum(x => x.Total)
             };
             return View(cartItemViewModel);
+        }
+
+        public async Task<IActionResult> Add(int Id)
+        {
+            ProductModel? productModel = await _db.Products.FirstOrDefaultAsync(x => x.Id == Id);
+
+            List<CartItemModel> carts = HttpContext.Session.GetObjectFromJson<List<CartItemModel>>("Cart") ?? new List<CartItemModel>();
+            CartItemModel? cartItem = carts.FirstOrDefault(x => x.ProductId == Id);
+
+            if (cartItem == null)
+            {
+                cartItem = new CartItemModel(productModel);
+                carts.Add(cartItem);
+            }
+            else
+            {
+                cartItem.Quantity++;
+            }
+
+            HttpContext.Session.SetObjectAsJson("Cart", carts);
+
+            TempData["Success"] = "Add item to cart successfully";
+
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+
+        public async Task<IActionResult> Decrease(int Id)
+        {
+            List<CartItemModel> carts = HttpContext.Session.GetObjectFromJson<List<CartItemModel>>("Cart") ?? new List<CartItemModel>();
+            CartItemModel? cartItem = carts.FirstOrDefault(x => x.ProductId == Id);
+
+            if (cartItem is not null)
+            {
+                if (cartItem.Quantity > 1)
+                {
+                    cartItem.Quantity--;
+                }
+                else
+                {
+                    carts.RemoveAll(x => x.ProductId == Id);
+                }
+            }
+
+            if (carts.Count == 0)
+            {
+                HttpContext.Session.Remove("Cart");
+            }
+            else
+                HttpContext.Session.SetObjectAsJson("Cart", carts);
+
+            TempData["Success"] = "Decrease item quantity to cart successfully";
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> Increase(int Id)
+        {
+            List<CartItemModel> carts = HttpContext.Session.GetObjectFromJson<List<CartItemModel>>("Cart") ?? new List<CartItemModel>();
+            CartItemModel? cartItem = carts.FirstOrDefault(x => x.ProductId == Id);
+
+            if (cartItem is not null)
+            {
+                if (cartItem.Quantity >= 1)
+                {
+                    cartItem.Quantity++;
+                }
+                else
+                {
+                    carts.RemoveAll(x => x.ProductId == Id);
+                }
+            }
+
+            if (carts.Count == 0)
+            {
+                HttpContext.Session.Remove("Cart");
+            }
+            else
+                HttpContext.Session.SetObjectAsJson("Cart", carts);
+
+            TempData["Success"] = "Increase item quantity to cart successfully";
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> Remove(int Id)
+        {
+            List<CartItemModel> carts = HttpContext.Session.GetObjectFromJson<List<CartItemModel>>("Cart") ?? new List<CartItemModel>();
+            CartItemModel? cartItem = carts.FirstOrDefault(x => x.ProductId == Id);
+
+            if (cartItem is not null)
+            {
+                carts.RemoveAll(x => x.ProductId == Id);
+            }
+
+            if (carts.Count == 0)
+            {
+                HttpContext.Session.Remove("Cart");
+            }
+            else
+                HttpContext.Session.SetObjectAsJson("Cart", carts);
+
+            TempData["Success"] = "Remove item of cart successfully";
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> Clear()
+        {
+            HttpContext.Session.Remove("Cart");
+            TempData["Success"] = "Remove all item of cart successfully";
+            return RedirectToAction("Index");
         }
     }
 }
