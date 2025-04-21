@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using ShoppingCart.Common;
 using ShoppingCart.Models;
@@ -100,16 +101,18 @@ namespace ShoppingCart.Areas.Admin.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(int Id, ProductModel product)
+		public async Task<IActionResult> Edit(ProductModel product)
 		{
 			ViewBag.Categories = new SelectList(_db.Categories, "Id", "Name", product.CategoryId);
 			ViewBag.Brands = new SelectList(_db.Brands, "Id", "Name", product.BrandId);
+
+			var existed_product = await _db.Products.FirstOrDefaultAsync(x => x.Id == product.Id);
 
 			if (ModelState.IsValid)
 			{
 				product.Slug = CommonHelper.FilterChar(product.Name);
 
-				var slug = await _db.Products.FirstOrDefaultAsync(p => p.Slug == product.Slug && p.Id != Id);
+				var slug = await _db.Products.FirstOrDefaultAsync(p => p.Slug == product.Slug && p.Id != product.Id);
 
 				if (slug is not null)
 				{
@@ -127,10 +130,32 @@ namespace ShoppingCart.Areas.Admin.Controllers
 					await product.ImageUpload.CopyToAsync(fs);
 					fs.Close();
 
-					product.Image = imageName;
+					// Delete old Picture
+					string oldFilePath = Path.Combine(uploadDir, existed_product.Image);
+
+					try
+					{
+						if (System.IO.File.Exists(oldFilePath))
+						{
+							System.IO.File.Delete(oldFilePath);
+						}
+					}
+					catch (Exception ex)
+					{
+						ModelState.AddModelError("", ex.Message);
+					}
+					
+					existed_product.Image = imageName;
 				}
 
-				_db.Products.Update(product);
+				existed_product.Name = product.Name;
+				existed_product.Description = product.Description;
+				existed_product.Price = product.Price;
+				existed_product.CategoryId = product.CategoryId;
+				existed_product.BrandId = product.BrandId;
+				existed_product.Slug = product.Slug;
+
+				_db.Products.Update(existed_product);
 				await _db.SaveChangesAsync();
 				TempData["Success"] = "Cập nhật sản phẩm thành công";
 				return RedirectToAction("Index");

@@ -20,13 +20,13 @@ namespace ShoppingCart.Models
 		public int BrandId { get; set; }
 		[Required(ErrorMessage = "Chọn một danh mục")]
 		public int CategoryId { get; set; }
-        public string Image { get; set; } = "noimage.jpg";
+        public string Image { get; set; }
 
         public CategoryModel Category { get; set; }
         public BrandModel Brand { get; set; }
 
         [NotMapped]
         [FileExtention]
-        public IFormFile ImageUpload { get; set; }
+        public IFormFile? ImageUpload { get; set; }
     }
 }
