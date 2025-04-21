@@ -16,9 +16,11 @@ namespace ShoppingCart.Models
 		public string Description { get; set; }
         [Required]
         public decimal Price { get; set; }
-        public int BrandId { get; set; }
-        public int CategoryId { get; set; }
-        public string Image {  get; set; }
+		[Required(ErrorMessage = "Chọn một thương hiệu")]
+		public int BrandId { get; set; }
+		[Required(ErrorMessage = "Chọn một danh mục")]
+		public int CategoryId { get; set; }
+        public string Image { get; set; } = "noimage.jpg";
 
         public CategoryModel Category { get; set; }
         public BrandModel Brand { get; set; }
