@@ -22,6 +22,7 @@ builder.Services.AddSession(option =>
 
 var app = builder.Build();
 
+app.UseStatusCodePagesWithRedirects("/Home/Error?StatusCode={0}");
 app.UseSession();
 
 // Configure the HTTP request pipeline.
@@ -38,6 +39,16 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "Areas",
     pattern: "{area:exists}/{controller=Product}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "Category",
+    pattern: "/category/{Slug?}",
+    defaults: new { controller = "Category", action = "Index" });
+
+app.MapControllerRoute(
+    name: "Brand",
+    pattern: "/brand/{Slug?}",
+    defaults: new { controller = "Brand", action = "Index" });
 
 app.MapControllerRoute(
     name: "default",

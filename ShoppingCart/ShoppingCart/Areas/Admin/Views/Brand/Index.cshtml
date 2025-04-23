@@ -1,18 +1,18 @@
-﻿@model IEnumerable<CategoryModel>
+﻿@model IEnumerable<BrandModel>
 @{
-    ViewData["Title"] = "Category List";
+    ViewData["Title"] = "Brand List";
 }
-<h3>List Category</h3>
-<a class="btn btn-success btn-sm" asp-controller="Category" asp-action="Create" asp-area="Admin">Add Category</a>
+<h3>List Brand</h3>
+<a class="btn btn-success btn-sm" asp-controller="Brand" asp-action="Create" asp-area="Admin">Add Brand</a>
 <table class="table">
     <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">Category Name</th>
-            <th scope="col">Category Description</th>
-            <th scope="col">Category Slug</th>
-            <th scope="col">Category Status</th>
-            <th scope="col">Category Manage</th>
+            <th scope="col">Brand Name</th>
+            <th scope="col">Brand Description</th>
+            <th scope="col">Brand Slug</th>
+            <th scope="col">Brand Status</th>
+            <th scope="col">Brand Manage</th>
         </tr>
     </thead>
     <tbody>
@@ -26,7 +26,8 @@
                     <td>@Html.Raw(@item.Description)</td>
                     <td>@item.Slug</td>
                     <td>
-                        @if(item.Status == 1){
+                        @if (item.Status == 1)
+                        {
                             <span class="text text-success">Hiển thị</span>
                         }
                         else
@@ -35,8 +36,8 @@
                         }
                     </td>
                     <td>
-                        <a class="btn btn-warning btn-sm" asp-controller="Category" asp-action="Edit" asp-area="Admin" asp-route-Id="@item.Id">Edit</a>
-                        <a class="btn btn-danger btn-sm confirmDeletion" asp-controller="Category" asp-action="Delete" asp-area="Admin" asp-route-Id="@item.Id">Delete</a>
+                        <a class="btn btn-warning btn-sm" asp-controller="Brand" asp-action="Edit" asp-area="Admin" asp-route-Id="@item.Id">Edit</a>
+                        <a class="btn btn-danger btn-sm confirmDeletion" asp-controller="Brand" asp-action="Delete" asp-area="Admin" asp-route-Id="@item.Id">Delete</a>
                     </td>
                 </tr>
             }

@@ -13,7 +13,7 @@ namespace ShoppingCart.Repository.Components
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var items = await _dbContext.Brands.ToListAsync();
+            var items = await _dbContext.Brands.Where(x => x.Status == 1).ToListAsync();
             return View(items);
         }
     }
