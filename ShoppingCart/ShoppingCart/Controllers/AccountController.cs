@@ -15,14 +15,29 @@ namespace ShoppingCart.Controllers
             _signInManager = signInManager;
 
         }
-        public IActionResult Index()
+        [HttpGet]
+        public IActionResult Login(string returnUrl)
         {
-            return View();
+            return View(new LoginViewModel
+            {
+                ReturnUrl = returnUrl,
+            });
         }
 
-        public async Task<IActionResult> Login()
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel loginViewModel)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                var result = await _signInManager.PasswordSignInAsync(loginViewModel.Username, loginViewModel.Password, false, false);
+                if (result.Succeeded)
+                {
+                    return Redirect(loginViewModel.ReturnUrl ?? "/");
+                }
+
+                ModelState.AddModelError("", "Invalid Username and Password");
+            }
+            return View(loginViewModel);
         }
 
         [HttpGet]
@@ -43,12 +58,12 @@ namespace ShoppingCart.Controllers
                     Email = userViewModel.Email,
                 };
 
-                IdentityResult result = await _userManager.CreateAsync(newUser);
+                IdentityResult result = await _userManager.CreateAsync(newUser, userViewModel.Password);
 
                 if (result.Succeeded)
                 {
                     TempData["Success"] = "Tạo User thành công";
-                    return Redirect("/Home");
+                    return Redirect("/account/login");
                 }
 
                 foreach (IdentityError error in result.Errors)
@@ -57,6 +72,12 @@ namespace ShoppingCart.Controllers
                 }
             }
             return View(userViewModel);
+        }
+
+        public async Task<IActionResult> Logout(string returnUrl = "/")
+        {
+            await _signInManager.SignOutAsync();
+            return Redirect(returnUrl);
         }
     }
 }
