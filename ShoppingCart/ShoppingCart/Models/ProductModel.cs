@@ -22,8 +22,12 @@ namespace ShoppingCart.Models
 		public int CategoryId { get; set; }
         public string Image { get; set; }
 
-        public CategoryModel Category { get; set; }
-        public BrandModel Brand { get; set; }
+        [ForeignKey(nameof(CategoryId))]
+        public virtual CategoryModel Category { get; set; }
+        [ForeignKey(nameof(BrandId))]
+        public virtual BrandModel Brand { get; set; }
+
+        public virtual ICollection<OrderDetails> OrderDetails { get; set; }
 
         [NotMapped]
         [FileExtention]
