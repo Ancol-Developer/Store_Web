@@ -1,5 +1,4 @@
-﻿@model IEnumerable<AppUserModel>
-@{
+﻿@{
     ViewData["Title"] = "User List";
 }
 <h3>List Brand</h3>
@@ -9,21 +8,23 @@
         <tr>
             <th scope="col">Username</th>
             <th scope="col">Email</th>
+            <th scope="col">Phone</th>
             <th scope="col">Mange</th>
         </tr>
     </thead>
     <tbody>
-        @if (Model is not null && Model.Any())
+        @if (Model is not null)
         {
-            foreach (var item in Model)
+            foreach (var userWidthRole in Model)
             {
                 <tr>
-                    <td>@item.UserName</td>
-                    <td>@item.Email</td>
-                    <td></td>
+                    <td>@userWidthRole.User.UserName</td>
+                    <td>@userWidthRole.User.Email</td>
+                    <td>@userWidthRole.User.PhoneNumber</td>
+                    <td>@userWidthRole.RoleName</td>
                     <td>
-                        <a class="btn btn-warning btn-sm" asp-controller="User" asp-action="Edit" asp-area="Admin" asp-route-Id="@item.Id">Edit</a>
-                        <a class="btn btn-danger btn-sm confirmDeletion" asp-controller="User" asp-action="Delete" asp-area="Admin" asp-route-Id="@item.Id">Delete</a>
+                        <a class="btn btn-warning btn-sm" asp-controller="User" asp-action="Edit" asp-area="Admin" asp-route-Id="@userWidthRole.User.Id">Edit</a>
+                        <a class="btn btn-danger btn-sm confirmDeletion" asp-controller="User" asp-action="Delete" asp-area="Admin" asp-route-Id="@userWidthRole.User.Id">Delete</a>
                     </td>
                 </tr>
             }

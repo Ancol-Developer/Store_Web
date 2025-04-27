@@ -10,7 +10,7 @@ using ShoppingCart.Repository;
 namespace ShoppingCart.Areas.Admin.Controllers
 {
 	[Area("Admin")]
-    [Authorize]
+    [Authorize(Roles = "Admin, Employee")]
     public class CategoryController : Controller
 	{
 

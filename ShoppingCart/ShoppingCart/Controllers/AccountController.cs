@@ -62,6 +62,10 @@ namespace ShoppingCart.Controllers
 
                 if (result.Succeeded)
                 {
+                    var user = await _userManager.FindByNameAsync(userViewModel.Username);
+
+                    var addRoleResult = await _userManager.AddToRoleAsync(user, "User");
+
                     TempData["Success"] = "Tạo User thành công";
                     return Redirect("/account/login");
                 }

@@ -22,7 +22,7 @@ builder.Services.AddSession(option =>
     option.Cookie.IsEssential = true;
 });
 
-builder.Services.AddIdentity<AppUserModel, IdentityRole>()
+builder.Services.AddIdentity<AppUserModel, AppRoleModel>()
     .AddEntityFrameworkStores<DataContext>();
 
 builder.Services.Configure<IdentityOptions>(options =>

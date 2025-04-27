@@ -11,8 +11,8 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace ShoppingCart.Areas.Admin.Controllers
 {
 	[Area("Admin")]
-	[Authorize]
-	public class ProductController : Controller
+    [Authorize(Roles = "Admin, Employee")]
+    public class ProductController : Controller
 	{
 		private readonly DataContext _db;
 		private readonly IWebHostEnvironment _webHostEnvironment;

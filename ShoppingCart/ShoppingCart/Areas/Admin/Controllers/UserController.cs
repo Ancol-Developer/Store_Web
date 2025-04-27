@@ -10,18 +10,24 @@ namespace ShoppingCart.Areas.Admin.Controllers
     [Area("Admin")]
     public class UserController : Controller
     {
+        private readonly DataContext _db;
         private readonly UserManager<AppUserModel> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<AppRoleModel> _roleManager;
 
-        public UserController(UserManager<AppUserModel> userManager, RoleManager<IdentityRole> roleManager)
+        public UserController(DataContext db,UserManager<AppUserModel> userManager, RoleManager<AppRoleModel> roleManager)
         {
+            this._db = db;
             _userManager = userManager;
             _roleManager = roleManager;
         }
         public async Task<IActionResult> Index()
         {
-            var items = await _userManager.Users.OrderByDescending(x => x.Id).ToListAsync();
-            return View(items);
+            var userWithRoles = await (from u in _db.Users
+                                       join ur in _db.UserRoles on u.Id equals ur.UserId
+                                       join r in _db.Roles on ur.UserId equals r.Id
+                                       select new { User = u, RoleName = r.Name})
+                                       .ToListAsync();
+            return View(userWithRoles);
         }
 
         [HttpGet]
@@ -42,6 +48,16 @@ namespace ShoppingCart.Areas.Admin.Controllers
 
                 if (result.Succeeded)
                 {
+                    var user = await _userManager.FindByNameAsync(appUserModel.UserName);
+
+                    var role = await _roleManager.FindByIdAsync(appUserModel.RoleId);
+
+                    var addRoleResult = await _userManager.AddToRoleAsync(user, role.Name);
+                    if (!addRoleResult.Succeeded)
+                    {
+                        AddIdentityErrors(addRoleResult);
+                    }
+
                     return RedirectToAction("Index", "User");
                 }
                 else
@@ -86,6 +102,43 @@ namespace ShoppingCart.Areas.Admin.Controllers
             ViewBag.Roles = new SelectList(roles, "Id", "Name");
 
             return View(user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, AppUserModel user)
+        {
+            var roles = await _roleManager.Roles.ToListAsync();
+            ViewBag.Roles = new SelectList(roles, "Id", "Name");
+
+            var existingUser = await _userManager.FindByIdAsync(id);
+            if (existingUser is null)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                existingUser.UserName = user.UserName;
+                existingUser.Email = user.Email;
+                existingUser.PhoneNumber = user.PhoneNumber;
+                existingUser.RoleId = user.RoleId;
+                var result = await _userManager.UpdateAsync(existingUser);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index", "User");
+                }
+                else
+                {
+                    AddIdentityErrors(result);
+                    return View(user);
+                }
+            }
+
+            TempData["error"] = "Model có một vài thứ đang bị lỗi";
+            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+            string errorMessage = string.Join("\n", errors);
+            return View(existingUser);
         }
 
         public async Task<IActionResult> Delete(string id)
