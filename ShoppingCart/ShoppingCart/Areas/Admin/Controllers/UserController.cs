@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ShoppingCart.Models;
+using ShoppingCart.Models.Common;
 using ShoppingCart.Repository;
 
 namespace ShoppingCart.Areas.Admin.Controllers
@@ -20,14 +21,30 @@ namespace ShoppingCart.Areas.Admin.Controllers
             _userManager = userManager;
             _roleManager = roleManager;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pg = 1)
         {
             var userWithRoles = await (from u in _db.Users
                                        join ur in _db.UserRoles on u.Id equals ur.UserId
-                                       join r in _db.Roles on ur.UserId equals r.Id
+                                       join r in _db.Roles on ur.RoleId equals r.Id
                                        select new { User = u, RoleName = r.Name})
                                        .ToListAsync();
-            return View(userWithRoles);
+
+            int pageSize = 10;
+
+            if (pg < 1)
+            {
+                pg = 1;
+            }
+
+            int totalItems = userWithRoles.Count();
+
+            var pager = new Paginate(totalItems, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+            var data = userWithRoles.Skip(recSkip).Take(pager.PageSize).ToList();
+
+            ViewBag.Pager = pager;
+
+            return View(data);
         }
 
         [HttpGet]

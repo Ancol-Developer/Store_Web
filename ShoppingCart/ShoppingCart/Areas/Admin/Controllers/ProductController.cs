@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using ShoppingCart.Common;
 using ShoppingCart.Models;
+using ShoppingCart.Models.Common;
 using ShoppingCart.Repository;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -23,11 +24,27 @@ namespace ShoppingCart.Areas.Admin.Controllers
 			_webHostEnvironment = webHostEnvironment;
 
 		}
-		public async Task<IActionResult> Index()
+		public async Task<IActionResult> Index(int pg = 1)
 		{
-			var items = await _db.Products.OrderByDescending(x => x.Id).Include(x => x.Category).Include(x => x.Brand).ToListAsync();
-			return View(items);
-		}
+            var products = await _db.Products.OrderByDescending(c => c.Id).ToListAsync();
+
+            int pageSize = 10;
+
+            if (pg < 1)
+            {
+                pg = 1;
+            }
+
+            int totalItems = products.Count();
+
+            var pager = new Paginate(totalItems, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+            var data = products.Skip(recSkip).Take(pager.PageSize).ToList();
+
+            ViewBag.Pager = pager;
+
+            return View(data);
+        }
 
 		[HttpGet]
 		public async Task<IActionResult> Create()

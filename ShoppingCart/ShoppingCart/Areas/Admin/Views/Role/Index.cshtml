@@ -1,6 +1,16 @@
 ﻿@model IEnumerable<AppRoleModel>
 @{
     ViewData["Title"] = "Role List";
+
+    Paginate pager = new Paginate();
+
+    int pageNo = 0;
+    if (ViewBag.Pager is not null)
+    {
+        pager = (Paginate)ViewBag.Pager;
+
+        pageNo = pager.CurrentPage;
+    }
 }
 <h3>List Roles</h3>
 <a class="btn btn-success btn-sm" asp-controller="Role" asp-action="Create" asp-area="Admin">Add Role</a>
@@ -28,3 +38,4 @@
         }
     </tbody>
 </table>
+@await Html.PartialAsync("_Paging", pager)

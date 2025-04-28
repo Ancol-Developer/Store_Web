@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShoppingCart.Models;
+using ShoppingCart.Models.Common;
 
 namespace ShoppingCart.Areas.Admin.Controllers
 {
@@ -15,10 +16,26 @@ namespace ShoppingCart.Areas.Admin.Controllers
             this._roleManager = roleManager;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pg = 1)
         {
-            var items = await _roleManager.Roles.ToListAsync();
-            return View(items);
+            var roles = await _roleManager.Roles.OrderByDescending(c => c.Id).ToListAsync();
+
+            int pageSize = 10;
+
+            if (pg < 1)
+            {
+                pg = 1;
+            }
+
+            int totalItems = roles.Count();
+
+            var pager = new Paginate(totalItems, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+            var data = roles.Skip(recSkip).Take(pager.PageSize).ToList();
+
+            ViewBag.Pager = pager;
+
+            return View(data);
         }
 
         [HttpGet]

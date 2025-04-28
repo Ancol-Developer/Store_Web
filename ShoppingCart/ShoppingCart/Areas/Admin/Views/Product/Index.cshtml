@@ -1,6 +1,16 @@
 ﻿@model IEnumerable<ProductModel>
 @{
     ViewData["Title"] = "Product List";
+
+    Paginate pager = new Paginate();
+
+    int pageNo = 0;
+    if (ViewBag.Pager is not null)
+    {
+        pager = (Paginate)ViewBag.Pager;
+
+        pageNo = pager.CurrentPage;
+    }
 }
 <h3>List Product</h3>
 <a class="btn btn-success btn-sm" asp-controller="Product" asp-action="Create" asp-area="Admin">Add Product</a>
@@ -41,3 +51,4 @@
         }
     </tbody>
 </table>
+@await Html.PartialAsync("_Paging", pager)

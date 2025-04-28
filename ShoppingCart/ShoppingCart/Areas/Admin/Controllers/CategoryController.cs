@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ShoppingCart.Common;
 using ShoppingCart.Models;
+using ShoppingCart.Models.Common;
 using ShoppingCart.Repository;
 
 namespace ShoppingCart.Areas.Admin.Controllers
@@ -20,10 +21,26 @@ namespace ShoppingCart.Areas.Admin.Controllers
 		{
 			_db = db;
 		}
-		public async Task<IActionResult> Index()
+		public async Task<IActionResult> Index(int pg = 1)
 		{
-			var items = await _db.Categories.OrderByDescending(c => c.Id).ToListAsync();
-			return View(items);
+			var categories = await _db.Categories.OrderByDescending(c => c.Id).ToListAsync();
+
+			int pageSize = 10;
+
+			if (pg < 1)
+			{
+				pg = 1;
+			}
+
+            int totalItems = categories.Count();
+
+			var pager = new Paginate(totalItems, pg, pageSize);
+			int recSkip = (pg - 1)*pageSize;
+			var data = categories.Skip(recSkip).Take(pager.PageSize).ToList();
+
+			ViewBag.Pager = pager;
+
+            return View(data);
 		}
 
 		[HttpGet]
