@@ -12,5 +12,7 @@ namespace ShoppingCart.Models
 		public string Description { get; set; }
 		public string Slug { get; set; }
 		public int Status { get; set; }
-	}
+
+        public virtual ICollection<ProductModel> Products { get; set; }
+    }
 }

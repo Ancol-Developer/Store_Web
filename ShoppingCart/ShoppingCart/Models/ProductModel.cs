@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using ShoppingCart.Repository.Validation;
 
 namespace ShoppingCart.Models
 {
@@ -14,11 +16,21 @@ namespace ShoppingCart.Models
 		public string Description { get; set; }
         [Required]
         public decimal Price { get; set; }
-        public int BrandId { get; set; }
-        public int CategoryId { get; set; }
-        public string Image {  get; set; }
+		[Required(ErrorMessage = "Chọn một thương hiệu")]
+		public int BrandId { get; set; }
+		[Required(ErrorMessage = "Chọn một danh mục")]
+		public int CategoryId { get; set; }
+        public string Image { get; set; }
 
-        public CategoryModel Category { get; set; }
-        public BrandModel Brand { get; set; }
+        [ForeignKey(nameof(CategoryId))]
+        public virtual CategoryModel Category { get; set; }
+        [ForeignKey(nameof(BrandId))]
+        public virtual BrandModel Brand { get; set; }
+
+        public virtual ICollection<OrderDetails> OrderDetails { get; set; }
+
+        [NotMapped]
+        [FileExtention]
+        public IFormFile? ImageUpload { get; set; }
     }
 }

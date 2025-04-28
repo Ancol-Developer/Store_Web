@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ShoppingCart.Areas.Admin.Repository;
+using ShoppingCart.Models;
 using ShoppingCart.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +14,9 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+// Add Email sender
+builder.Services.AddTransient<IEmailSender, EmailSender>();
+
 // Hanlde session
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(option =>
@@ -20,8 +26,24 @@ builder.Services.AddSession(option =>
     option.Cookie.IsEssential = true;
 });
 
+builder.Services.AddIdentity<AppUserModel, AppRoleModel>()
+    .AddEntityFrameworkStores<DataContext>();
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    // Password settings.
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequiredLength = 6;
+
+    options.User.RequireUniqueEmail = true;
+});
+
 var app = builder.Build();
 
+app.UseStatusCodePagesWithRedirects("/Home/Error?StatusCode={0}");
 app.UseSession();
 
 // Configure the HTTP request pipeline.
@@ -33,7 +55,22 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "Areas",
+    pattern: "{area:exists}/{controller=Product}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "Category",
+    pattern: "/category/{Slug?}",
+    defaults: new { controller = "Category", action = "Index" });
+
+app.MapControllerRoute(
+    name: "Brand",
+    pattern: "/brand/{Slug?}",
+    defaults: new { controller = "Brand", action = "Index" });
 
 app.MapControllerRoute(
     name: "default",
