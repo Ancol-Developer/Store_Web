@@ -26,7 +26,7 @@ namespace ShoppingCart.Areas.Admin.Controllers
 		}
 		public async Task<IActionResult> Index(int pg = 1)
 		{
-            var products = await _db.Products.OrderByDescending(c => c.Id).ToListAsync();
+            var products = await _db.Products.Include(x => x.Category).Include(x => x.Brand).OrderByDescending(c => c.Id).ToListAsync();
 
             int pageSize = 10;
 
