@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ShoppingCart.Areas.Admin.Repository;
 using ShoppingCart.Models;
 using ShoppingCart.Repository;
 
@@ -12,6 +13,9 @@ builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+// Add Email sender
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 // Hanlde session
 builder.Services.AddDistributedMemoryCache();
