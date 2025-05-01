@@ -44,5 +44,23 @@ namespace ShoppingCart.Areas.Admin.Controllers
             var detailsOrder = await _db.OrderDetails.Where(x => x.OrderCode == orderCode).Include(x => x.Product).ToListAsync();
             return View(detailsOrder);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateOrder(string ordercode, int status)
+        {
+            var order = await _db.Orders.FirstOrDefaultAsync(x => x.OrderCode == ordercode);
+
+            if (order is null)
+            {
+                return Json(new { success = false, message = "Cập nhật trạng thái đơn hàng thất bại" });
+            }
+
+            order.Status = status;
+
+            _db.Orders.Update(order);
+            await _db.SaveChangesAsync();
+
+            return Json(new { success = true, message = "Cập nhật trạng thái đơn hàng thành công" });
+        }
     }
 }
