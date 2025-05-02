@@ -26,13 +26,13 @@
 						{
 							<tr>
 								<td class="cart_product">
-									<a href=""><img src="~/images" alt=""></a>
+									<a href=""><img src="~/media/product.@item.Image" alt=""></a>
 								</td>
 								<td class="cart_description">
 									<h4><a href="">@item.ProductName</a></h4>
 								</td>
 								<td class="cart_price">
-									<p>@item.Price</p>
+									<p>@item.Price.ToString("#,##0 VNĐ")</p>
 								</td>
 								<td>
 									<a class="btn btn-success btn-sm" asp-controller="Cart" asp-action="Increase" asp-route-id="@item.ProductId"> + </a>
@@ -40,7 +40,7 @@
 									<a class="btn btn-default btn-sm" asp-controller="Cart" asp-action="Decrease" asp-route-id="@item.ProductId"> - </a>
 								</td>
 								<td class="cart_total">
-									<p class="cart_total_price">$@Model.CartItems.Where(x => x.ProductId == item.ProductId).Sum(x => x.Quantity * x.Price).ToString()</p>
+									<p class="cart_total_price">@Model.CartItems.Where(x => x.ProductId == item.ProductId).Sum(x => x.Quantity * x.Price).ToString("#,##0 VNĐ")</p>
 								</td>
 								<td>
 									<a class="btn btn-danger btn-sm" asp-controller="Cart" asp-action="Remove" asp-route-id="@item.ProductId">Remove</a>
@@ -48,7 +48,7 @@
 							</tr>
 						}
 						<tr rowspan="6">
-							<td colspan="4">Grand total: <p class="cart_total_price">@Model.GrandTotal.ToString()</p></td>
+							<td colspan="4">Grand total: <p class="cart_total_price">@Model.GrandTotal.ToString("#,##0 VNĐ")</p></td>
 							<td><a class="btn btn-danger btn-sm" asp-controller="Cart" asp-action="Clear">Clear</a></td>
 							<td><a class="btn btn-primary btn-sm" asp-controller="Checkout" asp-action="Checkout">Checkout</a></td>
 						</tr>

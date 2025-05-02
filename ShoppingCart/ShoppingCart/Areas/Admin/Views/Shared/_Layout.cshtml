@@ -14,6 +14,7 @@
 	<link href="~/css/main.css" rel="stylesheet">
 	<link href="~/css/responsive.css" rel="stylesheet">
 	<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.19.1/dist/sweetalert2.min.css" rel="stylesheet">
+	<link href="https://cdn.datatables.net/2.3.0/css/dataTables.dataTables.min.css" rel="stylesheet">
 	<!--[if lt IE 9]>
 	<script src="js/html5shiv.js"></script>
 	<script src="js/respond.min.js"></script>
@@ -108,6 +109,7 @@
 	<script src="~/js/jquery.prettyPhoto.js"></script>
 	<script src="~/js/main.js"></script>
 	<script src="~/backend/js/site.js"></script>
+	<script src="https://cdn.datatables.net/2.3.0/js/dataTables.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.19.1/dist/sweetalert2.all.min.js"></script>
 	<script>
 		$(function () {
@@ -116,6 +118,8 @@
 				Swal.fire(message);
 			}
 		});
+
+		let table = new DataTable('#mytable');
 	</script>
 	@await RenderSectionAsync("Scripts", required: false)
 </body>

@@ -25,6 +25,7 @@ namespace ShoppingCart.Controllers
             return View(cartItemViewModel);
         }
 
+        [HttpPost]
         public async Task<IActionResult> Add(int Id)
         {
             ProductModel? productModel = await _db.Products.FirstOrDefaultAsync(x => x.Id == Id);
@@ -46,7 +47,7 @@ namespace ShoppingCart.Controllers
 
             TempData["Success"] = "Add item to cart successfully";
 
-            return Redirect(Request.Headers["Referer"].ToString());
+            return Json(new { success = true });
         }
 
         public async Task<IActionResult> Decrease(int Id)
