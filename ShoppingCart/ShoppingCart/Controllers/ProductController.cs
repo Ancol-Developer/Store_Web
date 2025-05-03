@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ShoppingCart.Models;
 using ShoppingCart.Models.ViewModel;
 using ShoppingCart.Repository;
 
@@ -39,7 +40,6 @@ namespace ShoppingCart.Controllers
                 var productDetailViewModel = new ProductDetailViewModel
                 {
                     Product = product,
-                    Rating = product.Ratings.ToList()
                 };
 
                 return View(productDetailViewModel);
@@ -60,6 +60,35 @@ namespace ShoppingCart.Controllers
 
             ViewBag.KeyWord = searchTerm;
             return View(products);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CommentProduct(RatingModel ratingModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var ratingEntity = new RatingModel
+                {
+                    ProductId = ratingModel.ProductId,
+                    Comment = ratingModel.Comment,
+                    Name = ratingModel.Name,
+                    Email = ratingModel.Email,
+                    Star = ratingModel.Star
+                };
+
+                _db.Ratings.Add(ratingEntity);
+                await _db.SaveChangesAsync();
+
+                TempData["success"] = "Cảm ơn bạn đã đánh giá sản phẩm này!";
+
+                return Redirect(Request.Headers["Referer"]);
+            }
+            else
+            {
+                TempData["error"] = "Đánh giá không thành công!";
+                return RedirectToAction("Details", new { id = ratingModel.ProductId });
+            }
         }
     }
 }

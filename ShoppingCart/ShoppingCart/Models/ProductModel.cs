@@ -33,6 +33,6 @@ namespace ShoppingCart.Models
 
         [NotMapped]
         [FileExtention]
-        public IFormFile? ImageUpload { get; set; }
+        public IFormFile ImageUpload { get; set; }
     }
 }
