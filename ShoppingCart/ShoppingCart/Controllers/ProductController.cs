@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ShoppingCart.Models.ViewModel;
 using ShoppingCart.Repository;
 
 namespace ShoppingCart.Controllers
@@ -20,14 +21,28 @@ namespace ShoppingCart.Controllers
 
         public async Task<IActionResult> Details(int? id = null)
         {
-            var product = await _db.Products.Include(x => x.Category).Include(x => x.Brand).FirstOrDefaultAsync(x => x.Id == id);
+            var product = await _db.Products
+                .Include(x => x.Category)
+                .Include(x => x.Brand)
+                .Include(x => x.Ratings).FirstOrDefaultAsync(x => x.Id == id);
 
-            var relatedProducts = await _db.Products.Where(p => p.CategoryId == product.CategoryId && p.Id != product.Id).Take(4).ToListAsync();
+            var relatedProducts = await _db.Products
+                .Where(p => p.CategoryId == product.CategoryId && p.Id != product.Id)
+                .Take(4)
+                .ToListAsync();
+
             ViewBag.RelateProducts = relatedProducts;
+
 
             if (product is not null)
             {
-                return View(product);
+                var productDetailViewModel = new ProductDetailViewModel
+                {
+                    Product = product,
+                    Rating = product.Ratings.ToList()
+                };
+
+                return View(productDetailViewModel);
             }
 
             return RedirectToAction("Index");

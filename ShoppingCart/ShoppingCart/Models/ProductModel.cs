@@ -29,6 +29,8 @@ namespace ShoppingCart.Models
 
         public virtual ICollection<OrderDetails> OrderDetails { get; set; }
 
+        public virtual ICollection<RatingModel> Ratings { get; set; }
+
         [NotMapped]
         [FileExtention]
         public IFormFile? ImageUpload { get; set; }

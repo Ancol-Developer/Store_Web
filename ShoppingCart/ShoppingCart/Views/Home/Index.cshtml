@@ -55,7 +55,7 @@
 				$.ajax({
 					url: '@Url.Action("Add", "Cart")',
 					type: 'POST',
-					data: { Id: productId },
+					data: { Id: productId, quantity: 1 },
 					success: function (result) {
 						if(result.success){
 							Swal.fire("Thêm vào giỏ hàng thành công.");
