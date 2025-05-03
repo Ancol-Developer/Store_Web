@@ -50,7 +50,7 @@
 					<h2>@Model.Name</h2>
 					<p>Web ID: 1089772</p>
 					<span>
-						<span>US $@Model.Price.ToString("#,##0 VNĐ")</span>
+						<span>@Model.Price.ToString("#,##0 VNĐ")</span>
 						<label>Quantity: 1</label>
 						<input type="text" value="3" />
 						<button type="button" class="btn btn-fefault cart">
@@ -128,7 +128,7 @@
 								<div class="product-image-wrapper">
 									<div class="single-products">
 										<div class="productinfo text-center">
-											<img src="~/media/product/@relatedProduct.Image" alt="@relatedProduct.Image" />
+											<img src="~/media/products/@relatedProduct.Image" alt="@relatedProduct.Image" />
 											<h2>@relatedProduct.Price.ToString("#,##0 VNĐ")</h2>
 											<p>@relatedProduct.Name</p>
 											<p>Danh mục: @relatedProduct.Category.Name</p>
