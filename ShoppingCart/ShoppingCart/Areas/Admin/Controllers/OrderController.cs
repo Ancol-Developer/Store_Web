@@ -62,5 +62,13 @@ namespace ShoppingCart.Areas.Admin.Controllers
 
             return Json(new { success = true, message = "Cập nhật trạng thái đơn hàng thành công" });
         }
+
+        public async Task<IActionResult> Delete(int Id)
+        {
+            var order = _db.Orders.FirstOrDefault(o => o.Id == Id);
+            _db.Orders.Remove(order);
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
     }
 }

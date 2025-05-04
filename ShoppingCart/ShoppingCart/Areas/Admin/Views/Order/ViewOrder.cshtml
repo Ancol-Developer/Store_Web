@@ -5,7 +5,7 @@
     decimal subtotal = 0;
 }
 <h3>List Order</h3>
-<table class="table">
+<table class="table" id="detail_order">
     <thead>
         <tr>
             <th scope="col">#</th>
@@ -13,6 +13,7 @@
             <th scope="col">Product Name</th>
             <th scope="col">Quantity</th>
             <th scope="col">Price</th>
+            <th scope="col">Sum Price</th>
         </tr>
     </thead>
     <tbody>
@@ -21,7 +22,7 @@
             foreach (var item in Model)
             {
                 subtotal = item.Quantity * item.Price;
-                subtotal += subtotal;
+                total += subtotal;
                 <tr>
 					<input type="hidden" asp-for="@item.OrderCode" class="getId"/>
                     <th scope="row">@item.Id</th>
@@ -29,18 +30,21 @@
                     <td><img src="~/media/products/@item.Product.Image" width="50px"/> @item.Product.Name</td>
                     <td>@item.Quantity</td>
                     <td>@item.Price.ToString("#,##0 VNĐ")</td>
-                    <td>@subtotal..ToString("#,##0 VNĐ")</td>
+                    <td>@subtotal.ToString("#,##0 VNĐ")</td>
                 </tr>
             }
             <tr>
-                <th colspan="5">Total:</th>
-                <td>@total..ToString("#,##0 VNĐ")</td>
+                <th>Total:</th>
+                <td>@total.ToString("#,##0 VNĐ")</td>
                 <td>
                     <select class="form-control select-update-order">
                         <option value="1">Đơn hàng mới</option>
                         <option value="0">Đã xử lý</option>
                     </select>
                 </td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
         }
     </tbody>
@@ -74,6 +78,14 @@
                     }
                 });
             })
+        });
+
+        new DataTable('#detail_order', {
+            layout: {
+                topStart: {
+                    buttons: ['pdf', 'print']
+                }
+            }
         });
     </script>
 }
