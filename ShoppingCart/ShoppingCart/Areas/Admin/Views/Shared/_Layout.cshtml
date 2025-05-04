@@ -15,6 +15,7 @@
 	<link href="~/css/responsive.css" rel="stylesheet">
 	<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.19.1/dist/sweetalert2.min.css" rel="stylesheet">
 	<link href="https://cdn.datatables.net/2.3.0/css/dataTables.dataTables.min.css" rel="stylesheet">
+	<link href="https://cdn.datatables.net/buttons/3.2.3/css/buttons.dataTables.css" rel="stylesheet">
 	<!--[if lt IE 9]>
 	<script src="js/html5shiv.js"></script>
 	<script src="js/respond.min.js"></script>
@@ -111,7 +112,13 @@
 	<script src="~/js/main.js"></script>
 	<script src="~/backend/js/site.js"></script>
 	<script src="https://cdn.datatables.net/2.3.0/js/dataTables.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.19.1/dist/sweetalert2.all.min.js"></script>
+	<script src="https://cdn.datatables.net/buttons/3.2.3/js/dataTables.buttons.js"></script>
+	<script src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.dataTables.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+	<script src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.html5.min.js"></script>
+	<script src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.print.min.js"></script>
 	<script>
 		$(function () {
 			var message = '@TempData["Success"]';
@@ -120,7 +127,13 @@
 			}
 		});
 
-		let table = new DataTable('#mytable');
+		let table = new DataTable('#mytable', {
+			layout: {
+				topStart: {
+					buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+				}
+			}
+		});
 	</script>
 	@await RenderSectionAsync("Scripts", required: false)
 </body>

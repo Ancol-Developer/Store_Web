@@ -3,12 +3,14 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShoppingCart.Common;
+using ShoppingCart.Migrations;
 using ShoppingCart.Models;
 using ShoppingCart.Repository;
 
 namespace ShoppingCart.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles="Admin")]
     public class SliderController : Controller
     {
         private readonly DataContext _db;
