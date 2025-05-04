@@ -20,6 +20,8 @@ namespace ShoppingCart.Controllers
         public async Task<IActionResult> Index()
         {
             var products = await _db.Products.Include(x => x.Category).Include(x => x.Brand).ToListAsync();
+            var slider = await _db.Sliders.Where(s => s.Status == 1).ToListAsync();
+            ViewBag.Slider = slider;
             return View(products);
         }
 

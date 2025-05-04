@@ -1,10 +1,10 @@
-﻿@model ProductModel
+﻿@model SliderModel
 @{
-	ViewData["Title"] = "Edit Product";
+	ViewData["Title"] = "Create Slider";
 }
-<h4>Create Product</h4>
+<h4>Create Slider</h4>
 <div class="col-md-9">
-	<form asp-action="Edit" method="Post" enctype="multipart/form-data">
+	<form asp-action="Create" method="Post" enctype="multipart/form-data">
 		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 		<div class="form-group">
 			<label>Name</label>
@@ -19,39 +19,26 @@
 		</div>
 
 		<div class="form-group">
-			<label>Price</label>
-			<input asp-for="Price" class="form-control" />
-			<span asp-validation-for="Price" class="text-danger" />
-		</div>
-
-		<div class="form-group">
-			<label>Category</label>
-			<select asp-for="CategoryId" class="form-control" asp-items="ViewBag.Categories">
-				<option>-- Choose a category --</option>
+			<label>Status</label>
+			<select asp-for="Status" class="form-control">
+				<option value="1">Hiển thị</option>
+				<option value="0">Ẩn</option>
 			</select>
-			<span asp-validation-for="CategoryId" class="text-danger" />
-		</div>
-
-		<div class="form-group">
-			<label>Brand</label>
-			<select asp-for="BrandId" class="form-control" asp-items="ViewBag.Brands">
-				<option>-- Choose a brand --</option>
-			</select>
-			<span asp-validation-for="BrandId" class="text-danger" />
+			<span asp-validation-for="Status" class="text-danger" />
 		</div>
 
 		<div class="form-group">
 			<label>Image</label>
 			<input asp-for="ImageUpload" class="form-control" />
 			<span asp-validation-for="ImageUpload" class="text-danger" />
-			<img src="~/media/products/@Model.Image" width="120px" />
+			<img id="imgpreview" class="pt-2" />
 		</div>
 
 		<div class="form-group">
-			<button class="btn btn-primary">Update</button>
+			<button class="btn btn-primary">Create</button>
 		</div>
 	</form>
-	<a asp-action="Index">Back to List Product</a>
+	<a asp-action="Index">Back to List Slider</a>
 </div>
 @section Scripts {
 	<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
@@ -59,5 +46,10 @@
 	<script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
 	<script>
 		CKEDITOR.replace('Description');
+	</script>
+	<script>
+		$("#ImageUpload").change(function () {
+			readURL(this);
+		});
 	</script>
 }
