@@ -1,0 +1,39 @@
+﻿@model IEnumerable<ContactModel>
+@{
+    ViewData["Title"] = "Product List";
+}
+<h3>Contact</h3>
+<table class="table" id="mytable">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Image</th>
+            <th scope="col">Description</th>
+            <th scope="col">Map</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model is not null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <th scope="row"></th>
+                    <td>@item.Name</td>
+                    <td><img src="~/media/logo/@item.LogoImage" width="120px" height="150px" /></td>
+                    <td>@Html.Raw(@item.Description)</td>
+                    <td>@Html.Raw(@item.Map)</td>
+                    <td>@item.Email</td>
+                    <td>@item.Phone</td>
+                    <td>
+                        <a class="btn btn-warning btn-sm" asp-controller="Contact" asp-action="Edit" asp-area="Admin">Edit</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

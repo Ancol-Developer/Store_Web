@@ -25,6 +25,11 @@ namespace ShoppingCart.Controllers
             return View(products);
         }
 
+        public IActionResult Contact()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();
