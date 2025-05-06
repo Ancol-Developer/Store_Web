@@ -35,5 +35,7 @@ namespace ShoppingCart.Repository
 		public DbSet<RatingModel> Ratings { get; set; }
 		public DbSet<SliderModel> Sliders { get; set; }
 		public DbSet<ContactModel> Contacts { get; set; }
+		public DbSet<CompareModel> Compares { get; set; }
+		public DbSet<WishListModel> WishLists { get; set; }
 	}
 }

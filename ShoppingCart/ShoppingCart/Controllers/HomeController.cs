@@ -25,9 +25,10 @@ namespace ShoppingCart.Controllers
             return View(products);
         }
 
-        public IActionResult Contact()
+        public async Task<IActionResult> Contact()
         {
-            return View();
+            var contact = await _db.Contacts.FirstOrDefaultAsync();
+            return View(contact);
         }
 
         public IActionResult Privacy()
