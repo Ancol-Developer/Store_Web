@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using ShoppingCart.Models;
 using ShoppingCart.Repository;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace ShoppingCart.Controllers
 {
@@ -26,6 +27,28 @@ namespace ShoppingCart.Controllers
             var slider = await _db.Sliders.Where(s => s.Status == 1).ToListAsync();
             ViewBag.Slider = slider;
             return View(products);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Wishlist()
+        {
+            var wishlist_product = await (from w in _db.WishLists
+                                          join p in _db.Products on w.ProductId equals p.Id
+                                          join u in _db.Users on w.UserId equals u.Id
+                                          select new { User = u , Product = p, Wishlist = w})
+                                          .ToListAsync();
+            return View(wishlist_product);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Compare()
+        {
+            var compare_product = await (from c in _db.Compares
+                                         join p in _db.Products on c.ProductId equals p.Id
+                                         join u in _db.Users on c.UserId equals u.Id
+                                         select new { User = u, Product = p, Compare = c })
+                                          .ToListAsync();
+            return View(compare_product);
         }
 
         [HttpPost]
