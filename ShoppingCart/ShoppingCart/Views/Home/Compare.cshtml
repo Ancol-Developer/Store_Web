@@ -21,7 +21,7 @@
 			<th scope="row">@key</th>
 			<td><img src="~/media/products/@compare_product.Product.Image" width="120px" height="150px" /></td>
 			<td>@compare_product.Product.Name</td>
-			<td>@Html.Raw(@compare_product.Product.Description)/td>
+			<td>@Html.Raw(@compare_product.Product.Description)</td>
 			<td>@compare_product.Product.Price.ToString("#,##0 VNĐ")</td>
 			<td>
 				<a class="btn btn-danger btn-sm confirmDeletion" asp-controller="Home" asp-action="DeleteCompare" asp-route-Id="@compare_product.Compare.Id">Delete</a>

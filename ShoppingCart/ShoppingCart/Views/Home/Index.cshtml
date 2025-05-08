@@ -36,8 +36,8 @@
                             @if (User.Identity?.IsAuthenticated == true)
                             {
                                 <ul class="nav nav-pills nav-justified">
-                                    <li><button class="btn btn-default add-btn-wishlist"><i class="fa fa-plus-square" data-productid="@item.Id"></i>Yêu thích</button></li>
-                                    <li><button class="btn btn-default add-btn-compare"><i class="fa fa-plus-square" data-productid="@item.Id"></i>So sánh</button></li>
+                                    <li><button class="btn btn-default add-btn-wishlist" data-product1="@item.Id"><i class="fa fa-plus-square"></i>Yêu thích</button></li>
+                                    <li><button class="btn btn-default add-btn-compare" data-product2="@item.Id"><i class="fa fa-plus-square"></i>So sánh</button></li>
                                 </ul>
                             }
 
@@ -56,7 +56,7 @@
             $('.add-to-cart').click(function (e) {
                 e.preventDefault();
                 var productId = $(this).data('product_id');
-
+                alert(productId);
                 $.ajax({
                     url: '@Url.Action("Add", "Cart")',
                     type: 'POST',
@@ -79,7 +79,7 @@
         $(document).ready(function () {
             $('.add-btn-wishlist').click(function (e) {
                 e.preventDefault();
-                var productId = $(this).data('product_id');
+                var productId = $(this).data('product1');
                 alert(productId);
                 $.ajax({
                     url: '@Url.Action("AddWishList", "Home")',
@@ -103,7 +103,7 @@
         $(document).ready(function () {
             $('.add-btn-compare').click(function (e) {
                 e.preventDefault();
-                var productId = $(this).data('product_id');
+                var productId = $(this).data('product2');
                 alert(productId);
                 $.ajax({
                     url: '@Url.Action("AddCompare", "Home")',
