@@ -6,8 +6,8 @@ using System.Security.Claims;
 
 namespace ShoppingCart.Controllers
 {
-	public class CheckoutController : Controller
-	{
+    public class CheckoutController : Controller
+    {
         private readonly DataContext _db;
         private readonly IEmailSender _emailSender;
 
@@ -18,7 +18,7 @@ namespace ShoppingCart.Controllers
         }
 
         public async Task<IActionResult> Checkout()
-		{
+        {
             var userEmail = User.FindFirstValue(ClaimTypes.Email);
             if (userEmail == null)
             {
@@ -48,7 +48,6 @@ namespace ShoppingCart.Controllers
 
                     _db.OrderDetails.Add(orderDetails);
                 }
-
                 await _db.SaveChangesAsync();
 
                 HttpContext.Session.Remove("Cart");
@@ -57,12 +56,12 @@ namespace ShoppingCart.Controllers
                 string recipient = userEmail;
                 var subject = "Đặt hàng thành công";
                 var message = $"Đơn hàng của bạn đã được tạo với mã đơn hàng: {orderCode}";
-                await _emailSender.SendEmailAsync(recipient, subject, message);
+                //await _emailSender.SendEmailAsync(recipient, subject, message);
 
                 TempData["Success"] = "Đơn hàng đã được tạo";
 
                 return RedirectToAction("Index", "Cart");
             }
-		}
-	}
+        }
+    }
 }

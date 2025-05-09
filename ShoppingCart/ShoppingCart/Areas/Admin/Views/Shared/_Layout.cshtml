@@ -13,6 +13,9 @@
 	<link href="~/css/animate.css" rel="stylesheet">
 	<link href="~/css/main.css" rel="stylesheet">
 	<link href="~/css/responsive.css" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.19.1/dist/sweetalert2.min.css" rel="stylesheet">
+	<link href="https://cdn.datatables.net/2.3.0/css/dataTables.dataTables.min.css" rel="stylesheet">
+	<link href="https://cdn.datatables.net/buttons/3.2.3/css/buttons.dataTables.css" rel="stylesheet">
 	<!--[if lt IE 9]>
 	<script src="js/html5shiv.js"></script>
 	<script src="js/respond.min.js"></script>
@@ -67,13 +70,15 @@
 						</div>
 						<div class="mainmenu pull-left">
 							<ul class="nav navbar-nav collapse navbar-collapse">
-								<li><a asp-controller="Home" class="active">Home</a></li>
-								<li><a asp-controller="Product" class="active">Manage Products</a></li>
-								<li><a asp-controller="Category" class="active">Manage Category</a></li>
-								<li><a asp-controller="Brand" class="active">Manage Brand</a></li>
-								<li><a asp-controller="Order" class="active">Manage Order</a></li>
-								<li><a asp-controller="User" class="active">Manage User</a></li>
-								<li><a asp-controller="Role" class="active">Manage Role</a></li>
+								<li><a asp-controller="Home" asp-action="Index" asp-area="" class="active">Home</a></li>
+								<li><a asp-controller="Product" asp-action="Index" class="active">Manage Products</a></li>
+								<li><a asp-controller="Category" asp-action="Index" class="active">Manage Category</a></li>
+								<li><a asp-controller="Brand" asp-action="Index" class="active">Manage Brand</a></li>
+								<li><a asp-controller="Order" asp-action="Index" class="active">Manage Order</a></li>
+								<li><a asp-controller="Slider" asp-action="Index" class="active">Manage Slider</a></li>
+								<li><a asp-controller="User" asp-action="Index" class="active">Manage User</a></li>
+								<li><a asp-controller="Role" asp-action="Index" class="active">Manage Role</a></li>
+								<li><a asp-controller="Contact" asp-action="Index" class="active">Manage Contact</a></li>
 							</ul>
 						</div>
 					</div>
@@ -107,6 +112,30 @@
 	<script src="~/js/jquery.prettyPhoto.js"></script>
 	<script src="~/js/main.js"></script>
 	<script src="~/backend/js/site.js"></script>
+	<script src="https://cdn.datatables.net/2.3.0/js/dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/buttons/3.2.3/js/dataTables.buttons.js"></script>
+	<script src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.dataTables.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+	<script src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.html5.min.js"></script>
+	<script src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.print.min.js"></script>
+	<script>
+		$(function () {
+			var message = '@TempData["Success"]';
+			if(message != ''){
+				Swal.fire(message);
+			}
+		});
+
+		let table = new DataTable('#mytable', {
+			layout: {
+				topStart: {
+					buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+				}
+			}
+		});
+	</script>
 	@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

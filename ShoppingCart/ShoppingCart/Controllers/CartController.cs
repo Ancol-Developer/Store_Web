@@ -25,28 +25,30 @@ namespace ShoppingCart.Controllers
             return View(cartItemViewModel);
         }
 
-        public async Task<IActionResult> Add(int Id)
+        [HttpPost]
+        public async Task<IActionResult> Add(int Id, int quantity)
         {
-            ProductModel? productModel = await _db.Products.FirstOrDefaultAsync(x => x.Id == Id);
+            ProductModel productModel = await _db.Products.FirstOrDefaultAsync(x => x.Id == Id);
 
             List<CartItemModel> carts = HttpContext.Session.GetObjectFromJson<List<CartItemModel>>("Cart") ?? new List<CartItemModel>();
-            CartItemModel? cartItem = carts.FirstOrDefault(x => x.ProductId == Id);
+            CartItemModel cartItem = carts.FirstOrDefault(x => x.ProductId == Id);
 
             if (cartItem == null)
             {
                 cartItem = new CartItemModel(productModel);
+                cartItem.Quantity = quantity;
                 carts.Add(cartItem);
             }
             else
             {
-                cartItem.Quantity++;
+                cartItem.Quantity += quantity;
             }
 
             HttpContext.Session.SetObjectAsJson("Cart", carts);
 
             TempData["Success"] = "Add item to cart successfully";
 
-            return Redirect(Request.Headers["Referer"].ToString());
+            return Json(new { success = true });
         }
 
         public async Task<IActionResult> Decrease(int Id)

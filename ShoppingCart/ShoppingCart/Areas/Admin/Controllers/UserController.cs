@@ -102,6 +102,7 @@ namespace ShoppingCart.Areas.Admin.Controllers
             }
         }
 
+        [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
             if (string.IsNullOrEmpty(id))
