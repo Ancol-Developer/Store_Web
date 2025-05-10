@@ -51,12 +51,22 @@
 					<p>Web ID: 1089772</p>
 					<span>
 						<span>@Model.Product.Price.ToString("#,##0 VNĐ")</span>
-						<label>Quantity:</label>
-						<input type="text" value="1" id="inputQuantity" />
-						<button type="button" class="btn btn-fefault cart add-to-cart" data-product_id="@Model.Product.Id">
-							<i class="fa fa-shopping-cart"></i>
-							Add to cart
-						</button>
+						@if (Model.Product.Quantity > 0)
+						{
+							<label>Quantity:</label>
+							<input type="text" value="1" id="inputQuantity" />
+							<button type="button" class="btn btn-fefault cart add-to-cart" data-product_id="@Model.Product.Id">
+								<i class="fa fa-shopping-cart"></i>
+								Thêm giỏ hàng
+							</button>
+						}
+						else
+						{
+							<button type="button" class="btn btn-default cart">
+								<i class="fa fa-shopping-cart"></i>
+								Hết hàng
+							</button>
+						}
 					</span>
 					<p><b>Availability:</b> In Stock</p>
 					<p><b>Condition:</b> New</p>
@@ -167,7 +177,6 @@
 				e.preventDefault();
 				var productId = $(this).data('product_id');
 				var quantity = $('#inputQuantity').val();
-				alert(quantity);
 				$.ajax({
 					url: '@Url.Action("Add", "Cart")',
 					type: 'POST',

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ShoppingCart.Areas.Admin.Repository;
 using ShoppingCart.Models;
 using ShoppingCart.Repository;
@@ -46,7 +47,13 @@ namespace ShoppingCart.Controllers
                     orderDetails.Price = cart.Price;
                     orderDetails.Quantity = cart.Quantity;
 
+                    // Update Product Quantity
+                    var product = await _db.Products.FirstOrDefaultAsync(x => x.Id == cart.ProductId);
+                    product.Quantity -= cart.Quantity;
+                    product.Sold += cart.Quantity;
+
                     _db.OrderDetails.Add(orderDetails);
+                    _db.Products.Update(product);
                 }
                 await _db.SaveChangesAsync();
 
