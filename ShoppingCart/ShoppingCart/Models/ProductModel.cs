@@ -11,6 +11,8 @@ namespace ShoppingCart.Models
 		[Required, MinLength(4, ErrorMessage = "Yêu cầu nhập Tên sản phẩm")]
 		public string Name { get; set; }
         public string Slug { get; set; }
+        public int Quantity { get; set; }
+        public int Sold { get; set; }
 
 		[Required, MinLength(4, ErrorMessage = "Yêu cầu nhập Mô tả sản phẩm")]
 		public string Description { get; set; }

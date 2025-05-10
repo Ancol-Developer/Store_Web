@@ -1,0 +1,25 @@
+﻿@model ProductQuantityModel
+@{
+	ViewData["Title"] = "Add Quantity";
+}
+<h4>Add Quantity</h4>
+<div class="col-md-9">
+	<form asp-action="UpdateMoreQuantity" method="Post" enctype="multipart/form-data">
+		<input type="hidden" name="ProductId" value="@ViewBag.ProductId"/>
+		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+		<div class="form-group">
+			<label>Name</label>
+			<input min="1" value="1" max="2000" asp-for="Quantity" class="form-control" />
+			<span asp-validation-for="Quantity" class="text-danger" />
+		</div>
+
+		<div class="form-group">
+			<button class="btn btn-primary">Create</button>
+		</div>
+	</form>
+	<a asp-action="Index">Back to List Product</a>
+</div>
+@section Scripts {
+	<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+	<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
