@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis;
@@ -219,8 +220,10 @@ namespace ShoppingCart.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult AddQuantity(int Id)
+        public async Task<IActionResult> AddQuantity(int Id)
         {
+            var productQuantity = await _db.ProductQuantities.Where(x => x.ProductId == Id).ToListAsync(); ;
+            ViewBag.ProductQuantities = productQuantity;
             ViewBag.ProductId = Id;
             return View();
         }
