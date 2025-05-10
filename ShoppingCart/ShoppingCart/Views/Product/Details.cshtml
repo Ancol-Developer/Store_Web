@@ -177,7 +177,6 @@
 				e.preventDefault();
 				var productId = $(this).data('product_id');
 				var quantity = $('#inputQuantity').val();
-				alert(quantity);
 				$.ajax({
 					url: '@Url.Action("Add", "Cart")',
 					type: 'POST',

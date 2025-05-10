@@ -81,19 +81,22 @@ namespace ShoppingCart.Controllers
 
         public async Task<IActionResult> Increase(int Id)
         {
+            var product = await _db.Products.FirstOrDefaultAsync(x => x.Id == Id);
             List<CartItemModel> carts = HttpContext.Session.GetObjectFromJson<List<CartItemModel>>("Cart") ?? new List<CartItemModel>();
-            CartItemModel? cartItem = carts.FirstOrDefault(x => x.ProductId == Id);
+            CartItemModel cartItem = carts.FirstOrDefault(x => x.ProductId == Id);
 
-            if (cartItem is not null)
+            if (cartItem is not null && product.Quantity > cartItem.Quantity)
             {
                 if (cartItem.Quantity >= 1)
                 {
                     cartItem.Quantity++;
+                    TempData["Success"] = "Increase item quantity to cart successfully";
                 }
-                else
-                {
-                    carts.RemoveAll(x => x.ProductId == Id);
-                }
+            }
+            else
+            {
+                cartItem.Quantity = product.Quantity;
+                TempData["Success"] = "Maximine items quantity to cart successfully";
             }
 
             if (carts.Count == 0)
@@ -103,7 +106,7 @@ namespace ShoppingCart.Controllers
             else
                 HttpContext.Session.SetObjectAsJson("Cart", carts);
 
-            TempData["Success"] = "Increase item quantity to cart successfully";
+            
             return RedirectToAction("Index");
         }
 
