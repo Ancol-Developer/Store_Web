@@ -72,6 +72,7 @@
 							<ul class="nav navbar-nav collapse navbar-collapse">
 								<li><a asp-controller="Home" asp-action="Index" asp-area="" class="active">Home</a></li>
 								<li><a asp-controller="Product" asp-action="Index" class="active">Manage Products</a></li>
+								<li><a asp-controller="Shipping" asp-action="Index" class="active">Manage Shipping</a></li>
 								<li><a asp-controller="Category" asp-action="Index" class="active">Manage Category</a></li>
 								<li><a asp-controller="Brand" asp-action="Index" class="active">Manage Brand</a></li>
 								<li><a asp-controller="Order" asp-action="Index" class="active">Manage Order</a></li>
@@ -120,6 +121,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 	<script src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.html5.min.js"></script>
 	<script src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.print.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.4/dist/sweetalert2.all.min.js"></script>
 	<script>
 		$(function () {
 			var message = '@TempData["Success"]';

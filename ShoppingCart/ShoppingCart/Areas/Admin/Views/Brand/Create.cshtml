@@ -7,19 +7,19 @@
 	<form asp-action="Create" method="Post" enctype="multipart/form-data">
 		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 		<div class="form-group">
-			<label>Name</label>
+			<label>Chọn:</label>
 			<input asp-for="Name" class="form-control" />
 			<span asp-validation-for="Name" class="text-danger" />
 		</div>
 
 		<div class="form-group">
-			<label>Desciption</label>
+			<label>Chọn:</label>
 			<textarea asp-for="Description" class="form-control"></textarea>
 			<span asp-validation-for="Description" class="text-danger" />
 		</div>
 
 		<div class="form-group">
-			<label>Status</label>
+			<label>Chọn:</label>
 			<select asp-for="Status" class="form-control">
 				<option value="1">Hiển thị</option>
 				<option value="0">Ẩn</option>
