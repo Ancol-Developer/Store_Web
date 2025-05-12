@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using ShoppingCart.Areas.Admin.Repository;
 using ShoppingCart.Models;
 using ShoppingCart.Repository;
@@ -31,6 +32,16 @@ namespace ShoppingCart.Controllers
                 var orderItem = new OrderModel();
 
                 orderItem.OrderCode = orderCode;
+
+                decimal shippingPrice = 0;
+                var shippingPriceCookie = Request.Cookies["ShippingPrice"];
+                if (shippingPriceCookie is not null)
+                {
+                    var shippingPriceJson = shippingPriceCookie;
+                    shippingPrice = JsonConvert.DeserializeObject<decimal>(shippingPriceJson);
+                }
+
+                orderItem.ShippingCost = shippingPrice;
                 orderItem.Username = userEmail;
                 orderItem.Status = 1;
                 orderItem.CreatedDate = DateTime.Now;

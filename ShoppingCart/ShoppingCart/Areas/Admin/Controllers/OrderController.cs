@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ShoppingCart.Models;
 using ShoppingCart.Models.Common;
 using ShoppingCart.Repository;
 
@@ -42,7 +43,9 @@ namespace ShoppingCart.Areas.Admin.Controllers
         public async Task<IActionResult> ViewOrder(string orderCode)
         {
             var detailsOrder = await _db.OrderDetails.Where(x => x.OrderCode == orderCode).Include(x => x.Product).ToListAsync();
-            return View(detailsOrder);
+			var order = _db.Orders.Where(o => o.OrderCode == orderCode).FirstOrDefault();
+			ViewBag.ShippingCost = order.ShippingCost;
+			return View(detailsOrder);
         }
 
         [HttpPost]
@@ -56,7 +59,6 @@ namespace ShoppingCart.Areas.Admin.Controllers
             }
 
             order.Status = status;
-
             _db.Orders.Update(order);
             await _db.SaveChangesAsync();
 
