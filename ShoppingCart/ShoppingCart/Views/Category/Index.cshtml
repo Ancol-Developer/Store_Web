@@ -1,77 +1,125 @@
 ﻿@model IEnumerable<ProductModel>
 <div class="col-sm-3">
-	@await Html.PartialAsync("_SideBarPartial")
+    @await Html.PartialAsync("_SideBarPartial")
 </div>
 
 <style>
-	.product-image-wrapper {
-		height: 450px;
-	}
+    .product-image-wrapper {
+        height: 450px;
+    }
 </style>
 <div class="col-sm-9 padding-right">
-	<div class="features_items">
-		<!--features_items-->
-		<h2 class="title text-center">Features Items</h2>
-		@if (Model is not null && Model.Any())
-		{
-			foreach (var item in Model)
-			{
-				<div class="col-sm-4">
-					<div class="product-image-wrapper">
-						<div class="single-products">
-							<div class="productinfo text-center">
-								<a asp-controller="Product" asp-action="Details" asp-route-Id="@item.Id">
-									<img src="~/media/products/@item.Image" alt="@item.Name" width="100px" height="200px" />
-									<h2>@item.Price.ToString("#,##0 VNĐ")</h2>
-									<p>@item.Name</p>
-									<p>Danh mục: @item.Category.Name</p>
-									<p>Thương hiệu: @item.Brand.Name</p>
-								</a>
-								@if (item.Quantity > 0)
-								{
-									<button class="btn btn-default add-to-cart" data-product_id="@item.Id"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-								}
-								else
-								{
-									<button class="btn btn-default"><i class="fa fa-shopping-cart"></i> Hết hàng</button>
-								}
-							</div>
-						</div>
-						<div class="choose">
-							@if (User.Identity?.IsAuthenticated == true)
-							{
-								<ul class="nav nav-pills nav-justified">
-									<li style="text-align: center"><button class="btn btn-default add-btn-wishlist" data-product1="@item.Id"><i class="fa fa-plus-square"></i> Yêu thích</button></li>
-									<li style="text-align: center"><button class="btn btn-default add-btn-compare" data-product2="@item.Id"><i class="fa fa-plus-square"></i> So sánh</button></li>
-								</ul>
-							}
-						</div>
-					</div>
-				</div>
-			}
-		}
-	</div><!--features_items-->
+    @await Html.PartialAsync("_FilterProductsPartial")
+
+    <div class="features_items">
+        <!--features_items-->
+        <h2 class="title text-center">Features Items</h2>
+        @if (Model is not null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <div class="col-sm-4">
+                    <div class="product-image-wrapper">
+                        <div class="single-products">
+                            <div class="productinfo text-center">
+                                <a asp-controller="Product" asp-action="Details" asp-route-Id="@item.Id">
+                                    <img src="~/media/products/@item.Image" alt="@item.Name" width="100px" height="200px" />
+                                    <h2>@item.Price.ToString("#,##0 VNĐ")</h2>
+                                    <p>@item.Name</p>
+                                    <p>Danh mục: @item.Category.Name</p>
+                                    <p>Thương hiệu: @item.Brand.Name</p>
+                                </a>
+                                @if (item.Quantity > 0)
+                                {
+                                    <button class="btn btn-default add-to-cart" data-product_id="@item.Id"><i class="fa fa-shopping-cart"></i>Add to cart</button>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-default"><i class="fa fa-shopping-cart"></i> Hết hàng</button>
+                                }
+                            </div>
+                        </div>
+                        <div class="choose">
+                            @if (User.Identity?.IsAuthenticated == true)
+                            {
+                                <ul class="nav nav-pills nav-justified">
+                                    <li style="text-align: center"><button class="btn btn-default add-btn-wishlist" data-product1="@item.Id"><i class="fa fa-plus-square"></i> Yêu thích</button></li>
+                                    <li style="text-align: center"><button class="btn btn-default add-btn-compare" data-product2="@item.Id"><i class="fa fa-plus-square"></i> So sánh</button></li>
+                                </ul>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div><!--features_items-->
 </div>
 @section Scripts {
-	<script>
-		$(document).ready(function () {
-			$('.add-to-cart').click(function (e) {
-				e.preventDefault();
-				var productId = $(this).data('product_id');
-				$.ajax({
-					url: '@Url.Action("Add", "Cart")',
-					type: 'POST',
-					data: { Id: productId, quantity: 1 },
-					success: function (result) {
-						if (result.success) {
-							Swal.fire("Thêm vào giỏ hàng thành công.");
-						}
-					},
-					error: function (xhr, status, error) {
-						alert('Error adding product to cart.');
-					}
-				});
-			});
-		});
-	</script>
+    <script>
+        $(document).ready(function () {
+            $('.add-to-cart').click(function (e) {
+                e.preventDefault();
+                var productId = $(this).data('product_id');
+                $.ajax({
+                    url: '@Url.Action("Add", "Cart")',
+                    type: 'POST',
+                    data: { Id: productId, quantity: 1 },
+                    success: function (result) {
+                        if (result.success) {
+                            Swal.fire("Thêm vào giỏ hàng thành công.");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Error adding product to cart.');
+                    }
+                });
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#sort_by').on('change', function () {
+                var url = $(this).val();
+                if (url) {
+                    window.location = url;
+                }
+            });
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#slider-range").slider({
+                range: true,
+                min: 0,
+                step: 100000,
+                max: 5000000,
+                values: [100000, 300000],
+                slide: function (event, ui) {
+                    $("#amount").val(ui.values[0] + "đ" 
+                        + " - " +
+                        ui.values[1] + "đ");
+                }
+            });
+            
+            // range
+            $("#amount").val(
+                $("#slider-range").slider("values", 0) + "đ" +
+                " - " + 
+                $("#slider-range").slider("values", 1) + "đ");
+
+            //btn filter
+            $('.btn-locgia').on('click', function () {
+
+                var url = $(this).data("current_url");
+                // alert(url);
+                if (url) {
+                    window.location = url + "?startprice=" + $("#slider-range").slider("values", 0)
+                        + "&endprice=" + $("#slider-range").slider("values", 1);
+                }
+                return false;
+            });
+        });
+    </script>
 }
