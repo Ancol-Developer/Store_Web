@@ -13,8 +13,6 @@ namespace ShoppingCart.Models
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        [Required(ErrorMessage = "Yêu cầu nhập giá")]
-        public decimal Price { get; set; }
         [Required(ErrorMessage = "Yêu cầu nhập số lượng")]
         public int Quantity { get; set; }
         public int Status { get; set; }
