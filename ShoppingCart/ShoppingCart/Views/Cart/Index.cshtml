@@ -66,6 +66,14 @@
                         <tr rowspan="6">
                             <td colspan="5">
                                 Grand total: <p class="cart_total_price">@Model.GrandTotal.ToString("#,##0 VNĐ")</p>
+                                <form>
+                                    Coupon Code: <input type="text" class="form-control coupon-value" style="width: 300px" />
+                                    @* <span class="text text-success">@Model.CouponCode</span>  *@
+                                    <br />
+
+                                    <input type="button" value="Apply" class="btn btn-sm btn-primary btn-apply-coupon" />
+                                </form>
+
                                 Shipping Cost: <p class="cart_total_price">@Model.ShippingPrice.ToString("#,##0 VNĐ")</p>
                                 <p><a asp-controller="Cart" asp-action="RemoveShippingCookie">Xóa tính phí</a></p>
                                 <div class="form-group">
@@ -209,6 +217,30 @@
                     });
 
                 }
+            });
+        });
+    </script>
+
+    <script>
+        //delete shipping cost
+        $(".btn-apply-coupon").click(function () {
+            var coupon_value = $(".coupon-value").val();
+            //alert(coupon_value);
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("GetCoupon", "Cart")",
+                data: { coupon_value: coupon_value },
+                success: function (result) {
+                    if (result.success) {
+
+                        Swal.fire(result.message);
+                        location.reload();
+                    } else {
+
+                        Swal.fire(result.message);
+                    }
+                }
+
             });
         });
     </script>

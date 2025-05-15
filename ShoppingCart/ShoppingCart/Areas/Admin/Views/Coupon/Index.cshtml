@@ -71,8 +71,8 @@
                 <tr>
                     <td>@coupon.Name</td>
                     <td>@coupon.Description</td>
-                    <td>@coupon.DateStart.ToString("dd-MM-yyyy")</td>
-                    <td>@coupon.DateExpired.ToString("dd-MM-yyyy")</td>
+                    <td>@coupon.StartDate.ToString("dd-MM-yyyy")</td>
+                    <td>@coupon.EndDate.ToString("dd-MM-yyyy")</td>
                     <td>@coupon.Quantity</td>
                     <td>
                         @if (@coupon.Status == 1)
@@ -93,13 +93,13 @@
                     </td>
 
                     <td>
-                        @if (coupon.DateExpired < DateTime.Now)
+                        @if (coupon.EndDate < DateTime.Now)
                         {
                             <span class="text text-danger">Expired</span>
                         }
                         else
                         {
-                            TimeSpan remainingTime = coupon.DateExpired - DateTime.Now;
+                            TimeSpan remainingTime = coupon.EndDate - DateTime.Now;
                             int daysRemaining = remainingTime.Days;
                             @if (daysRemaining == 0)
                             {
