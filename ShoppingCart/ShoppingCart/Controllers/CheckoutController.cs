@@ -45,6 +45,7 @@ namespace ShoppingCart.Controllers
                 orderItem.Username = userEmail;
                 orderItem.Status = 1;
                 orderItem.CreatedDate = DateTime.Now;
+                orderItem.CouponCode = Request.Cookies["CouponTitle"];
 
                 _db.Orders.Add(orderItem);
 
@@ -78,7 +79,7 @@ namespace ShoppingCart.Controllers
 
                 TempData["Success"] = "Đơn hàng đã được tạo";
 
-                return RedirectToAction("Index", "Cart");
+                return RedirectToAction("History", "Account");
             }
         }
     }

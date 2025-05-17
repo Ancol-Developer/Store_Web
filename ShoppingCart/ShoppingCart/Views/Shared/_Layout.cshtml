@@ -92,11 +92,10 @@
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
 							<ul class="nav navbar-nav">
-								<li><a href="cart.html"><i class="fa fa-shopping-cart"></i> Cart</a></li>
 								@if (User.Identity.IsAuthenticated)
 								{
-									<li><a asp-controller="Cart"><i class="fa fa-user"></i> Account</a></li>
-									<li><a asp-controller="Checkout" asp-action="Index"><i class="fa fa-crosshairs"></i> Checkout</a></li>
+									<li><a asp-controller="Account" asp-action="History"><i class="fa fa-user"></i> Account</a></li>
+									<li><a asp-controller="Cart" asp-action="Index"><i class="fa fa-shopping-cart"></i> Checkout</a></li>
 									<li><a asp-controller="Home" asp-action="Wishlist"><i class="fa fa-star"></i> WishList</a></li>
 									<li><a asp-controller="Home" asp-action="Compare"><i class="fa-solid fa-compress"></i> Compare</a></li>
 									if (User.IsInRole("Admin"))
@@ -132,13 +131,6 @@
 						<div class="mainmenu pull-left">
 							<ul class="nav navbar-nav collapse navbar-collapse">
 								<li><a asp-controller="Home" asp-action="Index" class="active">Home</a></li>
-								<li class="dropdown">
-									<a asp-action="Index" asp-controller="Product">Shop<i class="fa fa-angle-down"></i></a>
-									<ul role="menu" class="sub-menu">
-										<li><a asp-action="Index" asp-controller="Cart">Cart</a></li>
-										<li><a>Login</a></li>
-									</ul>
-								</li>
 								<li><a asp-action="Index" asp-controller="Cart">Cart</a></li>
 								<li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
 							</ul>

@@ -45,6 +45,7 @@ namespace ShoppingCart.Areas.Admin.Controllers
             var detailsOrder = await _db.OrderDetails.Where(x => x.OrderCode == orderCode).Include(x => x.Product).ToListAsync();
 			var order = _db.Orders.Where(o => o.OrderCode == orderCode).FirstOrDefault();
 			ViewBag.ShippingCost = order.ShippingCost;
+			ViewBag.Status = order.Status;
 			return View(detailsOrder);
         }
 

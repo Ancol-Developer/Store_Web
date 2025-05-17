@@ -21,17 +21,22 @@ namespace ShoppingCart.Controllers
 
             var shippingPriceCookie = Request.Cookies["ShippingPrice"];
             decimal shippingPrice = 0;
+
+            // Nhận Coupon từ Cookie
+            var couponCode = Request.Cookies["CouponTitle"];
+
             if (shippingPriceCookie is not null)
             {
                 var shippingPriceJson = shippingPriceCookie;
-				shippingPrice = JsonConvert.DeserializeObject<decimal>(shippingPriceJson);
-			}
+                shippingPrice = JsonConvert.DeserializeObject<decimal>(shippingPriceJson);
+            }
 
             CartItemViewModel cartItemViewModel = new CartItemViewModel
             {
                 CartItems = cartItems,
                 GrandTotal = cartItems.Sum(x => x.Total),
-                ShippingPrice = shippingPrice,                
+                ShippingPrice = shippingPrice,
+                CouponCode = couponCode
             };
             return View(cartItemViewModel);
         }
@@ -117,7 +122,7 @@ namespace ShoppingCart.Controllers
             else
                 HttpContext.Session.SetObjectAsJson("Cart", carts);
 
-            
+
             return RedirectToAction("Index");
         }
 
@@ -149,44 +154,44 @@ namespace ShoppingCart.Controllers
             return RedirectToAction("Index");
         }
 
-		[HttpPost]
-		[Route("Cart/GetShipping")]
-		public async Task<IActionResult> GetShipping(ShippingModel shippingModel, string quan, string tinh, string phuong)
-		{
+        [HttpPost]
+        [Route("Cart/GetShipping")]
+        public async Task<IActionResult> GetShipping(ShippingModel shippingModel, string quan, string tinh, string phuong)
+        {
 
-			var existingShipping = await _db.Shippings
-				.FirstOrDefaultAsync(x => x.City == tinh && x.District == quan && x.Ward == phuong);
+            var existingShipping = await _db.Shippings
+                .FirstOrDefaultAsync(x => x.City == tinh && x.District == quan && x.Ward == phuong);
 
-			decimal shippingPrice = 0; // Set mặc định giá tiền
+            decimal shippingPrice = 0; // Set mặc định giá tiền
 
-			if (existingShipping != null)
-			{
-				shippingPrice = existingShipping.Price;
-			}
-			else
-			{
-				//Set mặc định giá tiền nếu ko tìm thấy
-				shippingPrice = 50000;
-			}
-			var shippingPriceJson = JsonConvert.SerializeObject(shippingPrice);
-			try
-			{
-				var cookieOptions = new CookieOptions
-				{
-					HttpOnly = true,
-					Expires = DateTimeOffset.UtcNow.AddMinutes(30),
-					Secure = true // using HTTPS
-				};
+            if (existingShipping != null)
+            {
+                shippingPrice = existingShipping.Price;
+            }
+            else
+            {
+                //Set mặc định giá tiền nếu ko tìm thấy
+                shippingPrice = 50000;
+            }
+            var shippingPriceJson = JsonConvert.SerializeObject(shippingPrice);
+            try
+            {
+                var cookieOptions = new CookieOptions
+                {
+                    HttpOnly = true,
+                    Expires = DateTimeOffset.UtcNow.AddMinutes(30),
+                    Secure = true // using HTTPS
+                };
 
-				Response.Cookies.Append("ShippingPrice", shippingPriceJson, cookieOptions);
-			}
-			catch (Exception ex)
-			{
-				//
-				Console.WriteLine($"Error adding shipping price cookie: {ex.Message}");
-			}
-			return Json(new { shippingPrice });
-		}
+                Response.Cookies.Append("ShippingPrice", shippingPriceJson, cookieOptions);
+            }
+            catch (Exception ex)
+            {
+                //
+                Console.WriteLine($"Error adding shipping price cookie: {ex.Message}");
+            }
+            return Json(new { shippingPrice });
+        }
 
         [HttpPost]
         [Route("Cart/GetCoupon")]
@@ -195,10 +200,11 @@ namespace ShoppingCart.Controllers
             var validCoupon = await _db.Coupons
                 .FirstOrDefaultAsync(x => x.Name == coupon_value && x.Quantity >= 1);
 
-            string couponTitle = validCoupon.Name + " | " + validCoupon?.Description;
 
             if (validCoupon != null)
             {
+                string couponTitle = validCoupon.Name + " | " + validCoupon?.Description;
+
                 TimeSpan remainingTime = validCoupon.EndDate - DateTime.Now;
                 int daysRemaining = remainingTime.Days;
 
@@ -242,7 +248,7 @@ namespace ShoppingCart.Controllers
         public IActionResult RemoveShippingCookie()
         {
             Response.Cookies.Delete("ShippingPrice");
-            return RedirectToAction("Index","Cart");
+            return RedirectToAction("Index", "Cart");
         }
-	}
+    }
 }
