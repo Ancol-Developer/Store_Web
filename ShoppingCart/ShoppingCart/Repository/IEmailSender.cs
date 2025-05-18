@@ -1,4 +1,4 @@
-﻿namespace ShoppingCart.Areas.Admin.Repository
+﻿namespace ShoppingCart.Repository
 {
     public interface IEmailSender
     {

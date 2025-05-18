@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Net.Mail;
 
-namespace ShoppingCart.Areas.Admin.Repository
+namespace ShoppingCart.Repository
 {
     public class EmailSender : IEmailSender
     {

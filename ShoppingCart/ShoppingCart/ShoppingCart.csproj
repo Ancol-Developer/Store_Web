@@ -25,6 +25,7 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Areas\Admin\Repository\" />
     <Folder Include="wwwroot\backend\css\" />
     <Folder Include="wwwroot\backend\image\" />
     <Folder Include="wwwroot\media\logo\" />
