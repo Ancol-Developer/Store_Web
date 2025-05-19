@@ -215,5 +215,56 @@ namespace ShoppingCart.Controllers
 
             return RedirectToAction("History", "Account");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> UpdateAccount()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var useId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userEmail = User.FindFirstValue(ClaimTypes.Email);
+
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == userEmail);
+
+            if (user is null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateInforAccount(AppUserModel user)
+        {
+            var useId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userEmail = User.FindFirstValue(ClaimTypes.Email);
+
+            var userByEmail = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == userEmail);
+
+            if (userByEmail is null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                userByEmail.PhoneNumber = user.PhoneNumber;
+                userByEmail.UserName = user.UserName;
+
+                var passwordHasher = new PasswordHasher<AppUserModel>();
+                var passwordHash = passwordHasher.HashPassword(user, user.PasswordHash);
+                userByEmail.PasswordHash = passwordHash;
+
+                _db.Update(userByEmail);
+                await _db.SaveChangesAsync();
+
+                TempData["success"] = "Update Account Information Success";
+
+                return RedirectToAction("UpdateAccount", "Account");
+            }
+        }
     }
 }
