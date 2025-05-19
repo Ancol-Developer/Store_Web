@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ShoppingCart.Models;
@@ -38,6 +40,18 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequiredLength = 6;
 
     options.User.RequireUniqueEmail = true;
+});
+
+// Configuration Login Google Account
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+}).AddCookie().AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+{
+    options.ClientId = builder.Configuration.GetSection("GoogleKey:ClientId").Value;
+    options.ClientSecret = builder.Configuration.GetSection("GoogleKey:ClientSecret").Value;
 });
 
 var app = builder.Build();
