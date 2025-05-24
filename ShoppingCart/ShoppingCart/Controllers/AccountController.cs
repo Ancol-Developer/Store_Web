@@ -177,7 +177,7 @@ namespace ShoppingCart.Controllers
         public async Task<IActionResult> Logout(string returnUrl = "/")
         {
             await _signInManager.SignOutAsync();
-            await HttpContext.SignOutAsync(returnUrl);
+            await HttpContext.SignOutAsync();
             return Redirect(returnUrl);
         }
 
@@ -282,6 +282,12 @@ namespace ShoppingCart.Controllers
         public async Task<IActionResult> GoogleResponse()
         {
             var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            if (!result.Succeeded)
+            {
+                return RedirectToAction("Login");
+            }
+
             var claims = result.Principal.Identities.FirstOrDefault().Claims.Select(claim => new
             {
                 claim.Issuer,
@@ -290,8 +296,45 @@ namespace ShoppingCart.Controllers
                 claim.Value
             });
 
-            TempData["success"] = "Đăng nhập thành công";
-            return RedirectToAction("Index", "Home");
-        } 
+            var email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+
+            string emailName = email.Split('@')[0];
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                var passwordHasher = new PasswordHasher<AppUserModel>();
+                var hashedPassword = passwordHasher.HashPassword(null, "123456789");
+                // Create new user
+                var newUser = new AppUserModel
+                {
+                    UserName = emailName,
+                    Email = email
+                };
+
+                newUser.PasswordHash = hashedPassword;
+
+                var resultCreate = await _userManager.CreateAsync(newUser);
+                if (resultCreate.Succeeded)
+                {
+                    // Add user to role
+                    await _userManager.AddToRoleAsync(newUser, "User");
+                    await _signInManager.SignInAsync(newUser, isPersistent: false);
+                    TempData["success"] = "Đăng ký thành công bằng tài khoản Google";
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    TempData["error"] = "Đăng ký không thành công bằng tài khoản Google";
+                    return RedirectToAction("Login", "Account");
+                }
+            }
+            else
+            {
+                // Sign in the user
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                return RedirectToAction("Index", "Home");
+            }
+        }
     }
 }
