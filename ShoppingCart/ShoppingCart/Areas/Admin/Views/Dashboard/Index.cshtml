@@ -1,0 +1,169 @@
+﻿﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+<h3>Dashboard Statistic</h3>
+<div class="row">
+    <div class="col-md-3">
+        <p>Thống kê sản phẩm</p>
+        @ViewBag.CountProduct
+    </div>
+    <div class="col-md-3">
+        <p>Thống kê đơn hàng</p>
+        @ViewBag.CountOrder
+    </div>
+    <div class="col-md-3">
+        <p>Thống kê danh mục</p>
+        @ViewBag.CountCategory
+    </div>
+    <div class="col-md-3">
+        <p>Thống kê user</p>
+        @ViewBag.CountUser
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <h4>Lọc dữ liệu theo:</h4>
+            <select class="filter-select">
+                <option value="30">---Lọc dữ liệu---</option>
+                <option value="7">1 tuần</option>
+                <option value="30">1 tháng</option>
+                <option value="90">3 tháng</option>
+                <option value="365">1 năm</option>
+            </select>
+        </div>
+    </div>
+
+    <h4>Biểu đồ thống kê</h4>
+
+    <div id="myfirstchart" style="height:250px;"></div>
+</div>
+
+@section Scripts {
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var chartData = [];
+            var chart = new Morris.Line({
+                element: 'myfirstchart',
+                parseTime: false,
+                data: chartData,
+                xkey: 'date',
+
+                ykeys: ['sold', 'quantity', 'revenue', 'profit'],
+
+                labels: ['Số lượng bán ra', 'Đơn hàng', 'Doanh thu', 'Lợi nhuật']
+            });
+
+            //filter all data chart
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("GetChartData", "Dashboard")",
+                success: function (data) {
+                    if (data) {
+                        chart.setData(data.map(function (item) {
+                            return {
+                                date: item.date,
+                                sold: item.sold,
+                                quantity: item.quantity,
+                                revenue: item.revenue,
+                                profit: item.profit
+                            }
+                        }));
+                    }
+                    else {
+                        chart.setData([]);
+                    }
+
+                }
+            });
+
+            $(".filter-select").change(function () {
+                var days = $(this).val();
+                var endDate = new Date();
+                var startDate = new Date(endDate.getTime() - days * 24 * 60 * 60 * 1000);
+
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("GetChartDataBySelect", "Dashboard")",
+                    dataType: "json",
+                    data: {
+                        startDate: startDate.toISOString().split('T')[0],
+                        endDate: endDate.toISOString().split('T')[0],
+                    },
+                    success: function (data) {
+                        if (data) {
+                            chart.setData(data.map(function (item) {
+                                return {
+                                    date: item.date,
+                                    sold: item.sold,
+                                    quantity: item.quantity,
+                                    revenue: item.revenue,
+                                    profit: item.profit
+                                }
+                            }));
+                        }
+                        else {
+                            chart.setData([]);
+                        }
+                    }
+                });
+            })
+
+            //submit filter date in chart
+            $(".filter-date").change(function () {
+                var filterdate = $(this).val();
+                // alert(filterdate);
+
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("SelectFilterDate", "Dashboard")",
+                    data: { filterdate: filterdate },
+                    success: function (data) {
+                        chart.setData(data);
+                    }
+                });
+            })
+
+            //select option filter data
+            $(".btn-filter-date").click(function () {
+                var filterdate = $("#datepicker").val();
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("SubmitFilterDate", "Dashboard")",
+                    data: { filterdate: filterdate },
+                    success: function (data) {
+                        chart.setData(data);
+                    }
+                });
+            })
+        });
+
+    </script>
+    <script>
+        $(function () {
+            $("#datepicker").datepicker({
+                dateFormat: 'yy-mm-dd', onSelect: function (datetext) {
+                    var d = new Date(); // for now
+
+                    var h = d.getHours();
+                    h = (h < 10) ? ("0" + h) : h;
+
+                    var m = d.getMinutes();
+                    m = (m < 10) ? ("0" + m) : m;
+
+                    var s = d.getSeconds();
+                    s = (s < 10) ? ("0" + s) : s;
+
+                    datetext = datetext + " " + h + ":" + m + ":" + s;
+
+                    $('#datepicker').val(datetext);
+                }
+            });
+        });
+    </script>
+}

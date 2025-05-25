@@ -281,7 +281,7 @@ namespace ShoppingCart.Controllers
 
         public async Task<IActionResult> GoogleResponse()
         {
-            var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
 
             if (!result.Succeeded)
             {

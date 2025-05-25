@@ -16,6 +16,8 @@
 	<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.19.1/dist/sweetalert2.min.css" rel="stylesheet">
 	<link href="https://cdn.datatables.net/2.3.0/css/dataTables.dataTables.min.css" rel="stylesheet">
 	<link href="https://cdn.datatables.net/buttons/3.2.3/css/buttons.dataTables.css" rel="stylesheet">
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.14.0/themes/base/jquery-ui.css">
 	<!--[if lt IE 9]>
 	<script src="js/html5shiv.js"></script>
 	<script src="js/respond.min.js"></script>
@@ -25,6 +27,7 @@
 	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
 	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
 	<link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
+
 </head><!--/head-->
 
 <body>
@@ -70,17 +73,18 @@
 						</div>
 						<div class="mainmenu pull-left">
 							<ul class="nav navbar-nav collapse navbar-collapse">
-								<li><a asp-controller="Home" asp-action="Index" asp-area="" class="active">Home</a></li>
-								<li><a asp-controller="Product" asp-action="Index" class="active">Manage Products</a></li>
-								<li><a asp-controller="Shipping" asp-action="Index" class="active">Manage Shipping</a></li>
-								<li><a asp-controller="Coupon" asp-action="Index" class="active">Manage Coupon</a></li>
-								<li><a asp-controller="Category" asp-action="Index" class="active">Manage Category</a></li>
-								<li><a asp-controller="Brand" asp-action="Index" class="active">Manage Brand</a></li>
-								<li><a asp-controller="Order" asp-action="Index" class="active">Manage Order</a></li>
-								<li><a asp-controller="Slider" asp-action="Index" class="active">Manage Slider</a></li>
-								<li><a asp-controller="User" asp-action="Index" class="active">Manage User</a></li>
-								<li><a asp-controller="Role" asp-action="Index" class="active">Manage Role</a></li>
-								<li><a asp-controller="Contact" asp-action="Index" class="active">Manage Contact</a></li>
+								<li><a asp-controller="Home" asp-action="Index" asp-area="">Home</a></li>
+								<li><a asp-controller="Product" asp-action="Index" class="active">Products</a></li>
+								<li><a asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
+								<li><a asp-controller="Shipping" asp-action="Index" >Shipping</a></li>
+								<li><a asp-controller="Coupon" asp-action="Index">Coupon</a></li>
+								<li><a asp-controller="Category" asp-action="Index">Category</a></li>
+								<li><a asp-controller="Brand" asp-action="Index">Brand</a></li>
+								<li><a asp-controller="Order" asp-action="Index">Order</a></li>
+								<li><a asp-controller="Slider" asp-action="Index">Slider</a></li>
+								<li><a asp-controller="User" asp-action="Index">User</a></li>
+								<li><a asp-controller="Role" asp-action="Index">Role</a></li>
+								<li><a asp-controller="Contact" asp-action="Index">Contact</a></li>
 							</ul>
 						</div>
 					</div>

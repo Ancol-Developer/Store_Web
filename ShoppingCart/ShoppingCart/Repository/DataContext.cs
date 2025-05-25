@@ -25,6 +25,31 @@ namespace ShoppingCart.Repository
                     LogoImage = "LogoImage",
 					Email = "abc@gmail.com",
                 });
+
+			var random = new Random();
+			var data = new List<StatisticalModel>();
+
+			int id = 1;
+			for (int i = 0; i < 20; i++)
+			{
+				int quantity = random.Next(50, 200);
+				int sold = random.Next(20, quantity);
+				int revenue = sold * random.Next(10000, 20000);
+				int profit = revenue - random.Next(100000, 300000);
+
+				data.Add(new StatisticalModel
+				{
+					 Id = id,
+					Quantity = quantity,
+					Sold = sold,
+					Revenue = revenue,
+					Profit = profit,
+					DateCreate = DateTime.Now.AddDays(-i)
+				});
+				id++;
+			}
+
+			builder.Entity<StatisticalModel>().HasData(data);
         }
 
         public DbSet<BrandModel> Brands { get; set; }
@@ -40,5 +65,6 @@ namespace ShoppingCart.Repository
 		public DbSet<ProductQuantityModel> ProductQuantities { get; set; }
 		public DbSet<ShippingModel> Shippings { get; set; }
 		public DbSet<CouponModel> Coupons { get; set; }
+		public DbSet<StatisticalModel> Statistical { get; set; }
 	}
 }
