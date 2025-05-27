@@ -18,7 +18,9 @@ namespace ShoppingCart.Models
 		public string Description { get; set; }
         [Required]
         public decimal Price { get; set; }
-		[Required(ErrorMessage = "Chọn một thương hiệu")]
+        [Required]
+        public decimal CapitalPrice { get; set; }
+        [Required(ErrorMessage = "Chọn một thương hiệu")]
 		public int BrandId { get; set; }
 		[Required(ErrorMessage = "Chọn một danh mục")]
 		public int CategoryId { get; set; }

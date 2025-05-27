@@ -26,6 +26,13 @@
 		</div>
 
 		<div class="form-group">
+			<label>Capital Price</label>
+			<input asp-for="CapitalPrice" pattern="[0-9.,]+" class="form-control typing-price" />
+			<span id="price-convert"></span>
+			<span asp-validation-for="CapitalPrice" class="text-danger" />
+		</div>
+
+		<div class="form-group">
 			<label>Category</label>
 			<select asp-for="CategoryId" class="form-control" asp-items="ViewBag.Categories">
 				<option>-- Choose a category --</option>

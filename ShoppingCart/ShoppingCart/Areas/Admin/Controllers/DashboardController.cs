@@ -64,5 +64,33 @@ namespace ShoppingCart.Areas.Admin.Controllers
             return Json(chartData);
         }
 
+        [HttpPost]
+        [Route("FilterData")]
+        public IActionResult FilterData(DateTime? fromDate, DateTime? toDate)
+        {
+            var query = _db.Statistical.AsQueryable();
+
+            if (fromDate.HasValue)
+            {
+                query = query.Where(x => x.DateCreate >= fromDate);
+            }
+
+            if (toDate.HasValue)
+            {
+                query = query.Where(x => x.DateCreate <= toDate);
+            }
+
+            var data = query.Select(x => new
+            {
+                date = x.DateCreate.ToString("yyyy-MM-dd"),
+                sold = x.Sold,
+                quantity = x.Quantity,
+                revenue = x.Revenue,
+                profit = x.Profit,
+            }).ToList();
+
+            return Json(data);
+        }
+        
     }
 }

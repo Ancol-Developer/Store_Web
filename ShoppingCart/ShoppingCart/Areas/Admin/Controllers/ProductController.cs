@@ -174,6 +174,7 @@ namespace ShoppingCart.Areas.Admin.Controllers
                 existed_product.CategoryId = product.CategoryId;
                 existed_product.BrandId = product.BrandId;
                 existed_product.Slug = product.Slug;
+                existed_product.CapitalPrice = product.CapitalPrice;
 
                 _db.Products.Update(existed_product);
                 await _db.SaveChangesAsync();
