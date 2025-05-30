@@ -64,7 +64,7 @@
                             </tr>
                         }
                         <tr rowspan="6">
-                            <td colspan="5">
+                            <td colspan="2">
                                 Grand total: <p class="cart_total_price">@Model.GrandTotal.ToString("#,##0 VNĐ")</p>
                                 <form>
                                     Coupon Code: <input type="text" class="form-control coupon-value" style="width: 300px" />
@@ -100,7 +100,6 @@
                             </td>
                             <td>
                                 <div class="flex-row">
-                                    <a class="btn btn-danger btn-sm" asp-controller="Cart" asp-action="Clear">Xóa giỏ hàng</a>
                                     @if (Model.ShippingPrice <= 0)
                                     {
                                         <a disabled="disabled" class="btn btn-success btn-sm" asp-controller="Checkout" asp-action="Checkout">Đặt hàng</a>
@@ -113,6 +112,18 @@
                                     }
                                 </div>
                                 
+                            </td>
+                            <td>
+                                <div class="flex-row">
+                                    <a class="btn btn-danger btn-sm" asp-controller="Cart" asp-action="Clear">Xóa giỏ hàng</a>
+                                    <form method="POST" asp-action="CreatePaymentMomo" asp-controller="Payment">
+                                        <input type="hidden" name="Amount" value="@Model.GrandTotal"></input>
+                                        <input type="hidden" name="OrderId" value="@Guid.NewGuid().ToString()"></input>
+                                        <input type="hidden" name="OrderInformation" value="Thanh toán Momo cho đơn hàng tại AncolShop"></input>
+                                        <input type="hidden" name="FullName" value="AncolShop"></input>
+                                        <button class="btn btn-danger" type="submit">Pay with Momo</button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     }
