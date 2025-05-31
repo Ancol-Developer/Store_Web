@@ -9,6 +9,10 @@ using ShoppingCart.Services.Mono;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Connect MomoAPI
+builder.Services.Configure<MomoOptionModel>(builder.Configuration.GetSection("MomoAPI"));
+builder.Services.AddScoped<IMomoService, MomoService>();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 // Create DB context
@@ -16,11 +20,6 @@ builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-
-// Connnect MomoAPI
-//Connect MomoAPI
-builder.Services.Configure<MomoOptionModel>(builder.Configuration.GetSection("MomoAPI"));
-builder.Services.AddScoped<IMomoService, MomoService>();
 
 // Add Email sender
 builder.Services.AddTransient<IEmailSender, EmailSender>();
